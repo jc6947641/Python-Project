@@ -1,40 +1,18 @@
-<!-- 前端页面中的表单 -->
-<form id="addProductForm">
-    <label for="productName">Product Name:</label>
-    <input type="text" id="productName" name="productName" required>
+<!-- templates/index.html -->
 
-    <label for="productQuantity">Quantity:</label>
-    <input type="number" id="productQuantity" name="productQuantity" required>
-
-    <button type="button" onclick="addProduct()">Add Product</button>
-</form>
-
-<script>
-    function addProduct() {
-        // 获取用户输入的数据
-        const productName = document.getElementById("productName").value;
-        const productQuantity = document.getElementById("productQuantity").value;
-
-        // 构建请求体
-        const data = {
-            name: productName,
-            quantity: productQuantity
-        };
-
-        // 发送 POST 请求到后端
-        fetch('/add_product', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);  // 显示后端返回的消息
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index Page</title>
+</head>
+<body>
+    <h1>仓库列表</h1>
+    <ul>
+        {% for cargo in cargo_list %}
+            <li>ID: {{ cargo.id }}, Name: {{ cargo.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
