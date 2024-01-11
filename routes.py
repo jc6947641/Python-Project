@@ -1,7 +1,8 @@
 # routes.py
 
-from flask import render_template,jsonify,request,url_for,redirect
+from flask import render_template,jsonify,request,url_for,redirect,session
 from models import Cargo,db
+from login import userpass
 
 def get_data_routes(app):
     @app.route('/')
@@ -13,17 +14,25 @@ def get_data_routes(app):
 
     @app.route('/index')
     def index():
-        # Fetch all cargo records from the database
-        cargo_list = Cargo.query.all()
+        # Get the user_id from the session
+        user_id = session.get('user_id')
 
-        # Get the maximum ID value from the Cargo records
-        max_id = Cargo.query.with_entities(Cargo.id).order_by(Cargo.id.desc()).first()
+        # Check if user_id is present in the session
+        if user_id is not None:
+            # Fetch cargo records from the database where owner_id is equal to user_id
+            cargo_list = Cargo.query.filter_by(owner_id=user_id).all()
 
-        # Extract the maximum ID value or default to 0 if there are no cargo records
-        max_id_value = max_id[0] if max_id else 0
+            # Get the maximum ID value from the Cargo records
+            max_id = Cargo.query.with_entities(Cargo.id).order_by(Cargo.id.desc()).first()
 
-        # Render the index.html template with cargo data and max_id_value
-        return render_template('index.html', cargo_list=cargo_list, max_id_value=max_id_value)
+            # Extract the maximum ID value or default to 0 if there are no cargo records
+            max_id_value = max_id[0] if max_id else 0
+
+            # Render the index.html template with cargo data and max_id_value
+            return render_template('index.html', cargo_list=cargo_list, max_id_value=max_id_value)
+        else:
+            # If user_id is not present in the session, redirect to the login page or handle it accordingly
+            return redirect(url_for('login'))
 
     @app.route('/delete_cargo/<int:cargo_id>', methods=['POST'])
     def delete_cargo(cargo_id):
@@ -51,11 +60,13 @@ def get_data_routes(app):
 
     @app.route('/insert_cargo', methods=['GET', 'POST'])
     def insert_cargo():
+        user_id = session.get('user_id')
+        print(user_id)
         if request.method == 'POST':
             # Get data from the form
             name = request.form.get('name')
             num = request.form.get('num')
-            owner_id = request.form.get('owner_id')
+            owner_id = user_id
             store_id = request.form.get('store_id')
 
             # 获取当前物品最大的ID值

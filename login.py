@@ -1,6 +1,6 @@
 from flask import Flask
 app = Flask(__name__)
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, session
 from models import db, User
 
 # Assuming you have a User model defined in models.py
@@ -17,8 +17,15 @@ def userpass(app):
             user = User.query.filter_by(account=account, password=password).first()
 
             if user:
-                # Login successful, redirect to index.html
+                # Login successful, get the user ID
+                user_id = user.id
+                session['user_id'] = user_id
+
+                # 重定向到 index.html 或任何其他路由
                 return redirect(url_for('homelist'))
+
+                # Redirect to index.html or any other route with the user ID
+                return redirect(url_for('homelist', user_id=user_id))
             else:
                 # Login failed, show an error message
                 error_message = "Invalid credentials. Please try again."
@@ -34,6 +41,7 @@ def register(app):
         if request.method == 'POST':
             # 获取表单数据
             account = request.form['account']
+            name = request.form['name']
             password = request.form['password']
 
             # 检查数据库中是否已存在该用户
@@ -45,7 +53,7 @@ def register(app):
                 return render_template('register.html', error_message=error_message)
             else:
                 # 如果用户不存在，创建新用户并保存到数据库
-                new_user = User(account=account, password=password)
+                new_user = User(account=account, name = name,password=password)
                 db.session.add(new_user)
                 db.session.commit()
 
