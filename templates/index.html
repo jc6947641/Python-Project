@@ -1,46 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index Page</title>
-    <!-- Add jQuery library -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-</head>
-<body>
-    <h1>仓库列表</h1>
-    <button type="button" onclick="location.href='{{ url_for('insert_cargo') }}'">Insert Cargo</button>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Index Page</title>
+        <!-- Add jQuery library -->
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    </head>
+    <body>
+        <h1>仓库列表</h1>
+        <button type="button" onclick="location.href='{{ url_for('insert_cargo') }}'">Insert Cargo</button>
+         {% if flash_messages %}
+            <div class="flash-messages">
+                {% for message in flash_messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-    <ul>
-        {% for cargo in cargo_list %}
-            <li>
-                ID: {{ cargo.id }}, Name: {{ cargo.name }}
-                <button type="button" class="delete-btn" data-cargo-id="{{ cargo.id }}">Delete</button>
-            </li>
-        {% endfor %}
-    </ul>
+        <style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+    }
 
-    <script>
-        // Attach click event to delete buttons
-        $('.delete-btn').on('click', function() {
-            var cargoId = $(this).data('cargo-id');
-            if (confirm('确定删除该货物吗？')) {
-                // Send AJAX request to delete_cargo route
-                $.ajax({
-                    url: '/delete_cargo/' + cargoId,
-                    type: 'POST',
-                    success: function(response) {
-                        if (response.success) {
-                            // Remove the deleted item from the list
-                            $('li:contains("' + cargoId + '")').remove();
-                            alert(response.message); // Show success message
-                        } else {
-                            alert(response.message); // Show error message
+    h1 {
+        color: #333;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        border: 1px solid #ddd;
+        margin: 5px 0;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .delete-btn {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+     </style>
+
+        <ul>
+            {% for cargo in cargo_list %}
+                <li>
+                    ID: {{ cargo.id }}  名称: {{ cargo.name }} 数量:{{ cargo.num }}  仓库:{{ cargo.store_id}}  使用者:{{ cargo.owner_id}}
+                    <button type="button" class="delete-btn" data-cargo-id="{{ cargo.id }}">Delete</button>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <script>
+            // Attach click event to delete buttons
+            $('.delete-btn').on('click', function() {
+                var cargoId = $(this).data('cargo-id');
+                if (confirm('确定删除该货物吗？')) {
+                    // Send AJAX request to delete_cargo route
+                    $.ajax({
+                        url: '/delete_cargo/' + cargoId,
+                        type: 'POST',
+                        success: function(response) {
+                            if (response.success) {
+                                // Remove the deleted item from the list
+                                $('li:contains("' + cargoId + '")').remove();
+                                alert(response.message); // Show success message
+                            } else {
+                                alert(response.message); // Show error message
+                            }
                         }
-                    }
-                });
-            }
-        });
-    </script>
-</body>
-</html>
+                    });
+                }
+            });
+        </script>
+
+        <script>
+            // Show success message and reload the page after successful insertion
+            $(document).ready(function() {
+                var successMessage = "{{ success_message }}";
+                if (successMessage) {
+                    alert(successMessage);
+                    window.location.reload();
+                }
+            });
+        </script>
+
+    </body>
+    </html>

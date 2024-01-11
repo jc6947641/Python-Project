@@ -2,8 +2,13 @@ from flask import Flask
 from models import db
 from login import userpass
 from routes import get_data_routes
+import secrets
+
+secret_key = secrets.token_hex(16)  # 16 字节的随机十六进制字符串
+
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret_key'
 
 # 配置数据库连接
 HOSTNAME = '127.0.0.1'
