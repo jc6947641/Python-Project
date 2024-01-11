@@ -27,36 +27,25 @@ def get_data_routes(app):
             message = f"删除失败，找不到货物(ID: {cargo_id})。"
             return jsonify({'success': False, 'message': message})
 
-    return app
-def insert_cargo(app):
     @app.route('/insert_cargo', methods=['GET', 'POST'])
-    def insert_cargo_route():
+    def insert_cargo():
+
         if request.method == 'POST':
-            # 获取从表单提交的数据
-            cargo_data = {
-                'id': request.form['id'],
-                'name': request.form['name'],
-                'num': request.form['num'],
-                'owner_id': request.form['owner_id'],
-                'store_id': request.form['store_id']
-            }
+            # Get data from the form
+            id = request.form.get('id')
+            name = request.form.get('name')
+            num = request.form.get('num')
+            owner_id = request.form.get('owner_id')
+            store_id = request.form.get('store_id')
 
-            # Check if a Cargo with the same ID exists
-            existing_cargo = Cargo.query.filter_by(id=cargo_data['id']).first()
-            if existing_cargo:
-                return render_template('insert_cargo.html', error="仓库中已经有相同的id的物品.")
+            new_cargo = Cargo(id = id ,name=name, num=num, owner_id=owner_id, store_id=store_id)
 
-            # Check if the specified store_id exists in the Cargo table
-            existing_store = Cargo.query.filter_by(store_id=cargo_data['store_id']).first()
-            if not existing_store:
-                return render_template('insert_cargo.html', error="没有该仓库.")
-
-            # 创建 Cargo 对象并插入到数据库
-            new_cargo = Cargo(**cargo_data)
+            # Add the new cargo to the database
             db.session.add(new_cargo)
             db.session.commit()
 
-            return redirect(url_for('index'))
+            message = "成功插入货物！"
+            return jsonify({'success': True, 'message': message})
 
         return render_template('insert_cargo.html')
 

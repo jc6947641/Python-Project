@@ -8,6 +8,8 @@ class Cargo(db.Model):
     name = db.Column(db.String(45), nullable=False)
     num = db.Column(db.DECIMAL(10, 2), default=0)
     owner_id = db.Column(db.Integer, nullable=False)
+    store_id = db.Column(db.Integer, nullable=False)
+
 
 
 class User(db.Model):
