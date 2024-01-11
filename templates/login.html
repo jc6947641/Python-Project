@@ -4,6 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+       <style>
+        div{
+            width: 600px;
+            margin: 100px auto;
+
+        }
+
+        .message{
+            display: inline-block;
+            font-size: 12px;
+            color: #999;
+            background: url() no-repeat left center;
+            padding-left: 20px;
+        }
+        .wrong{
+            color: red;
+
+
+        }
+        .right{
+            color: green;
+
+        }
+    </style>
 </head>
 <body>
     <h2>登录页面</h2>
@@ -11,11 +35,38 @@
         <p style="color: red;">{{ error_message }}</p>
     {% endif %}
     <form method="post" action="{{ url_for('login') }}">
-        <label for="account">Account:</label>
-        <input type="text" id="account" name="account" required><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
+        <div class="register">
+        <input type="text" id="account" name="account" required>
+        <p class="message "></p>
+        </div>
+
+
+        <div class="register">
+        <input type="password" id="password" name="password" required>
+        <p class="message ">请输入6~16位密码</p>
+         </div>
         <input type="submit" value="Login">
     </form>
+    <script>
+        // 首先判断的事件是表单失去焦点 onblur
+        // 如果输入正确则提示正确的信息颜色为绿色小图标变化
+        // 如果输入不是6~16位，则提示错误信息颜色为红色 小图标变化
+        // 因为里面变化样式较多，我们采取classname修改样式
+
+        // 1.获取元素
+        var ipt = document.querySelector('.ipt');
+        var message = document.querySelector('.message');
+        ipt.onblur = function(){
+            if(this.value.length < 6 || this.value.length > 16){
+                message.className = 'message wrong';
+                message.innerHTML = '您输入的位数不对，要求6~16位';
+            }else{
+                message.className = 'message right';
+                message.innerHTML = '密码输入正确';
+            }
+        }
+
+
+    </script>
 </body>
 </html>
