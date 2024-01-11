@@ -18,7 +18,7 @@ def userpass(app):
 
             if user:
                 # Login successful, redirect to index.html
-                return redirect(url_for('index'))
+                return redirect(url_for('homelist'))
             else:
                 # Login failed, show an error message
                 error_message = "Invalid credentials. Please try again."

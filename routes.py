@@ -7,6 +7,9 @@ def get_data_routes(app):
     @app.route('/')
     def home():
         return render_template('login.html')
+    @app.route('/homelist')
+    def homelist():
+        return render_template('homelist.html')
     @app.route('/index')
     def index():
         # Fetch all cargo records from the database
