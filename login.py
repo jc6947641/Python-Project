@@ -28,4 +28,29 @@ def userpass(app):
         return render_template('login.html')
 
     # Define your other routes here
+def register(app):
+    @app.route('/register', methods=['GET', 'POST'], endpoint='register')
+    def register_view():
+        if request.method == 'POST':
+            # 获取表单数据
+            account = request.form['account']
+            password = request.form['password']
 
+            # 检查数据库中是否已存在该用户
+            user = User.query.filter_by(account=account).first()
+
+            if user:
+                # 如果用户已存在，显示错误信息
+                error_message = "Account already exists. Please log in."
+                return render_template('register.html', error_message=error_message)
+            else:
+                # 如果用户不存在，创建新用户并保存到数据库
+                new_user = User(account=account, password=password)
+                db.session.add(new_user)
+                db.session.commit()
+
+                # 注册成功，重定向到登录页面
+                return redirect(url_for('login'))
+        else:
+             # 如果是GET请求，渲染注册表单
+            return render_template('register.html')
