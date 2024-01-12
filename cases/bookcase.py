@@ -5,7 +5,6 @@ def go_bookcase(app):
     def book():
         # Get the user_id from the session
         user_id = session.get('user_id')
-
         # Check if user_id is present in the session
         if user_id is not None:
             # Fetch cargo records from the database where owner_id is equal to user_id

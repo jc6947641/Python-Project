@@ -606,6 +606,7 @@ body {
     </div>
 
     <div class="container_form container--signin">
+<<<<<<< Updated upstream
         <form method="post" action="{{ url_for('login') }}" class="form" id="form2">
             <h2 class="form_title">登录界面</h2>
             <input type="text" id="account" name="account" placeholder="用户名" class="input" required>
@@ -625,10 +626,42 @@ body {
             <div class="overlay_panel overlay--right">
                 <button class="btn" id="signUp">注册界面</button>
             </div>
+=======
+    <form method="post" action="{{ url_for('login') }}" class="form" >
+        <div class="register">
+        <input type="text" id="account" name="account" required  placeholder="用户名" class="input">
+        <p class="message "></p>
+>>>>>>> Stashed changes
         </div>
     </div>
 </div>
 
+<<<<<<< Updated upstream
+=======
+        <div class="register">
+        <input type="password" id="password" name="password" required placeholder="Password" class="input">
+        <p class="message ">请输入6~16位密码</p>
+         </div>
+        <button type="submit" class="btn" onclick="location.href='{{ url_for('homelist') }}'">登录</button>
+    </form>
+
+
+    </div>
+
+    <!-- 浮层 -->
+    <div class="container_overlay">
+        <div class="overlay">
+            <div class="overlay_panel overlay--left">
+                <button class="btn" id="signIn">登录界面</button>
+            </div>
+            <div class="overlay_panel overlay--right">
+                <button class="btn" id="signUp">注册界面</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+>>>>>>> Stashed changes
 <!--背景-->
 <div class="slidershow">
     <div class="slidershow--image" style="background-image: url('imagine/1.jpg')"></div>
@@ -638,6 +671,11 @@ body {
 </div>
 
 <!--onclick="location.href='{{ url_for('homelist') }}'"-->
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
 <script>
     var inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
     inputs.forEach(function(input) {
