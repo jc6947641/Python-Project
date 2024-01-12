@@ -9,7 +9,7 @@
     </head>
     <body>
         <h1>运动器材仓库</h1>
-        <button type="button" onclick="location.href='{{ url_for('insert_sport_cargo') }}'">物品入库</button>
+        <button type="button" onclick="location.href='{{ url_for('insert_sport_cargo') }}'">新物品入库</button>
          {% if flash_messages %}
             <div class="flash-messages">
                 {% for message in flash_messages %}
@@ -55,7 +55,7 @@
             {% for cargo in cargo_list %}
                 <li>
                     物品ID: {{ cargo.id }}  名称: {{ cargo.name }} 数量:{{ cargo.num }} 使用者ID:{{ cargo.owner_id}}
-                    <button type="button" class="delete-btn" data-cargo-id="{{ cargo.id }}">Delete</button>
+                    <button type="button" class="delete-btn" data-cargo-id="{{ cargo.id }}">删除</button>
                 </li>
             {% endfor %}
         </ul>

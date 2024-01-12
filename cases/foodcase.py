@@ -80,3 +80,4 @@ def go_foodcase(app):
                 return jsonify({'success': False, 'error': 'Cargo not found'})
         except Exception as e:
             return jsonify({'success': False, 'error': str(e)})
+
