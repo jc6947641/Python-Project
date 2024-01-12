@@ -17,6 +17,7 @@ def get_data_routes(app):
         # Render the index.html template with cargo data
         return render_template('index.html', cargo_list=cargo_list)
 
+
     @app.route('/delete_cargo/<int:cargo_id>', methods=['POST'])
     def delete_cargo(cargo_id):
         cargo_to_delete = Cargo.query.get(cargo_id)
@@ -52,4 +53,14 @@ def get_data_routes(app):
 
         return render_template('insert_cargo.html')
 
+
+
     return app
+
+    @app.route('/index/function1')
+    def function1():
+        return render_template('function1.html')
+    @app.route('/index/function2')
+    def function2():
+        return render_template('function2.html')
+
