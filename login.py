@@ -41,8 +41,10 @@ def register(app):
         if request.method == 'POST':
             # 获取表单数据
             account = request.form['account']
-            name = request.form['name']
             password = request.form['password']
+            name = request.form['name']
+            address = request.form['address']
+            tel = request.form['tel']
 
             # 检查数据库中是否已存在该用户
             user = User.query.filter_by(account=account).first()
@@ -53,7 +55,7 @@ def register(app):
                 return render_template('register.html', error_message=error_message)
             else:
                 # 如果用户不存在，创建新用户并保存到数据库
-                new_user = User(account=account, name = name,password=password)
+                new_user = User(account=account, name = name,password=password,address = address,tel = tel)
                 db.session.add(new_user)
                 db.session.commit()
 

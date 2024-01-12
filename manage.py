@@ -2,6 +2,11 @@ from flask import Flask
 from models import db
 from login import userpass, register  # 导入新的函数
 from routes import get_data_routes
+from cases.foodcase import go_foodcase
+from cases.bookcase import go_bookcase
+from cases.sportcase import go_sportcase
+from cases.medicinecase import go_medicinecase
+from cases.user import go_user
 import secrets
 
 secret_key = secrets.token_hex(16)
@@ -21,6 +26,12 @@ db.init_app(app)
 userpass(app)
 register(app)  # 调用新的函数
 get_data_routes(app)
+go_foodcase(app)  # 食品仓库
+go_bookcase(app)  # 书籍仓库
+go_sportcase(app)  # 运动器材仓库
+go_medicinecase(app)
+go_user(app)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
