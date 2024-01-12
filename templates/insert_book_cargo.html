@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物品入库</title>
+</head>
+<body>
+    <h1>物品入库</h1>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('insert_book_cargo') }}">
+
+        <label for="name">物品名:</label>
+        <input type="text" name="name" required><br>
+
+        <label for="num">数量:</label>
+        <input type="text" name="num" required><br>
+
+        <button type="submit">入库</button>
+    </form>
+</body>
+</html>
