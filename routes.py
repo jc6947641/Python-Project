@@ -52,4 +52,6 @@ def get_data_routes(app):
 
         return render_template('insert_cargo.html')
 
+
+
     return app
