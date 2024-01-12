@@ -57,3 +57,26 @@ def go_foodcase(app):
             return redirect(url_for('food'))
 
         return render_template('insert_food_cargo.html')
+    @app.route('/insert_food', methods=['POST'])
+    def insert_food():
+        try:
+            # Get data from the request
+            data = request.get_json()
+            cargo_id = data.get('cargoId')
+            cargo_num = int(data.get('cargoNum'))  # Convert cargo_num to an integer
+
+            # Retrieve the cargo record from the database using cargo_id
+            current_cargo = Cargo.query.filter_by(id=cargo_id).first()
+
+            # Update the cargo quantity
+            if current_cargo:
+                current_cargo.num += cargo_num
+
+                # Commit the changes to the database
+                db.session.commit()
+
+                return jsonify({'success': True})
+            else:
+                return jsonify({'success': False, 'error': 'Cargo not found'})
+        except Exception as e:
+            return jsonify({'success': False, 'error': str(e)})
