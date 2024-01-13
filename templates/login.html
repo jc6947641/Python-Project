@@ -1,84 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>注册登录界面Ⅰ</title>-->
-<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">-->
-<!--       <style>-->
-<!--        div{-->
-<!--            width: 600px;-->
-<!--            margin: 100px auto;-->
-
-<!--        }-->
-
-<!--        .message{-->
-<!--            display: inline-block;-->
-<!--            font-size: 12px;-->
-<!--            color: #999;-->
-<!--            background: url() no-repeat left center;-->
-<!--            padding-left: 20px;-->
-<!--        }-->
-<!--        .wrong{-->
-<!--            color: red;-->
-
-
-<!--        }-->
-<!--        .right{-->
-<!--            color: green;-->
-
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-
-
-<!--<body>-->
-<!--    <h2>登录页面??????</h2>-->
-<!--    {% if error_message %}-->
-<!--        <p style="color: red;">{{ error_message }}</p>-->
-<!--    {% endif %}-->
-<!--    <form method="post" action="{{ url_for('login') }}">-->
-<!--        <div class="register">-->
-<!--        <input type="text" id="account" name="account" required>-->
-<!--        <p class="message "></p>-->
-<!--        </div>-->
-
-
-<!--        <div class="register">-->
-<!--        <input type="password" id="password" name="password" required>-->
-<!--        <p class="message ">请输入6~16位密码</p>-->
-<!--         </div>-->
-<!--        <input type="submit" value="Login">-->
-<!--    </form>-->
-<!--    <script>-->
-<!--        // 首先判断的事件是表单失去焦点 onblur-->
-<!--        // 如果输入正确则提示正确的信息颜色为绿色小图标变化-->
-<!--        // 如果输入不是6~16位，则提示错误信息颜色为红色 小图标变化-->
-<!--        // 因为里面变化样式较多，我们采取classname修改样式-->
-
-<!--        // 1.获取元素-->
-<!--        var ipt = document.querySelector('.ipt');-->
-<!--        var message = document.querySelector('.message');-->
-<!--        ipt.onblur = function(){-->
-<!--            if(this.value.length < 6 || this.value.length > 16){-->
-<!--                message.className = 'message wrong';-->
-<!--                message.innerHTML = '您输入的位数不对，要求6~16位';-->
-<!--            }else{-->
-<!--                message.className = 'message right';-->
-<!--                message.innerHTML = '密码输入正确';-->
-<!--            }-->
-<!--        }-->
-
-
-<!--    </script>-->
-<!--</body>-->
-<!--</html>-->
-
-
-
-
-
-
 
 
 <!--改2-->
@@ -597,14 +516,33 @@ body {
 <div class="container right-panel-active">
     <!-- 注册 -->
     <div class="container_form container--signup">
-        <form action="#" class="form" id="form1">
-            <h2 class="form_title">注册界面</h2>
-            <input type="text" placeholder="User" class="input" />
-            <input type="password" placeholder="Password" class="input" />
-            <button class="btn">注册</button>
-        </form>
+<!--        <h2>注册页面</h2>-->
+    {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+    <form method="post" action="{{ url_for('register') }}" class="form">
+        <h2 class="form_title">注册界面</h2>
+<!--        <label for="account">账号:</label><br>-->
+        <input type="text" id="account" name="account" placeholder="账号" required><br>
+<!--        <label for="password">密码:</label><br>-->
+        <input type="password" id="password" name="password" placeholder="密码" required><br>
+<!--         <label for="name">姓名:</label><br>-->
+        <input type="text" id="name" name="name" placeholder="姓名" required><br>
+<!--        <label for="name">住址:</label><br>-->
+        <input type="text" id="address" name="address" placeholder="住址" required><br>
+<!--        <label for="name">电话:</label><br>-->
+        <input type="text" id="tel" name="tel" placeholder="电话" required><br>
+        <input class="btn" type="submit" value="注册">
+    </form>
+<!--        <form action="#" class="form" id="form1">-->
+<!--            <h2 class="form_title">注册界面</h2>-->
+<!--            <input type="text" placeholder="User" class="input" />-->
+<!--            <input type="password" placeholder="Password" class="input" />-->
+<!--            <button class="btn">注册</button>-->
+<!--        </form>-->
     </div>
 
+<!--    登录-->
     <div class="container_form container--signin">
         <form method="post" action="{{ url_for('login') }}" class="form" >
             <h2 class="form_title">登录界面</h2>
@@ -674,7 +612,7 @@ body {
         firstForm.addEventListener("submit", (e) => e.preventDefault());
         secondForm.addEventListener("submit", (e) => e.preventDefault());
     </script>
-<a href="{{ url_for('register') }}">注册</a>
+<!--<a href="{{ url_for('register') }}">注册</a>-->
 </body>
 </html>
 
