@@ -7,7 +7,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            margin: 0;
+            margin: 0 ;
             font-family: 'Arial', sans-serif;
         }
 
@@ -77,27 +77,38 @@
     </script>
 </head>
 <body>
+
+
+
     <div class="content">
-        <!-- Left navigation bar -->
-        <div class="content-left">
-            <div class="left-title">
-                <a href="#">Warehouse Management System</a>
-            </div>
-            <div class="nav-menu">
-                <div class="nav-title">Menu</div>
-                <div class="nav-content">
-                    <a href="{{ url_for('food') }}">食品</a>
-                    <a href="{{ url_for('book') }}">书籍</a>
-                    <a href="{{ url_for('sport') }}">运动器材</a>
-                    <a href="{{ url_for('medicine') }}">药品</a>
-                    <a href="{{ url_for('user') }}">个人信息</a>
-                </div>
-            </div>
+    <!-- Left navigation bar -->
+    <div class="content-left">
+        <div class="left-title">
+            <a href="#" onclick="moveLeftBar()">Warehouse Management System</a>
         </div>
-        <!-- Right content area -->
-        <div class="content-right">
-            <!-- Content will be dynamically loaded here -->
+        <div class="nav-menu">
+            <div class="nav-title">Menu</div>
+            <div class="nav-content">
+                <a href="{{ url_for('food') }}">食品</a>
+                <a href="{{ url_for('book') }}">书籍</a>
+                <a href="{{ url_for('sport') }}">运动器材</a>
+                <a href="{{ url_for('medicine') }}">药品</a>
+                <a href="{{ url_for('user') }}">个人信息</a>
+            </div>
         </div>
     </div>
+    <!-- Right content area -->
+    <div class="content-right">
+        <!-- Content will be dynamically loaded here -->
+    </div>
+</div>
+
+<script>
+    function moveLeftBar() {
+        var leftBar = document.querySelector('.content-left');
+        leftBar.classList.add('move-down-right');
+    }
+</script>
+
 </body>
 </html>
