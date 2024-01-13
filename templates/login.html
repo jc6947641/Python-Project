@@ -513,7 +513,7 @@ body {
 <body>
 <!--登录改-->
 
-<div class="container right-panel-active">
+<div class="container left-panel-active">
     <!-- 注册 -->
     <div class="container_form container--signup">
 <!--        <h2>注册页面</h2>-->
@@ -534,21 +534,16 @@ body {
         <input type="text" id="tel" name="tel" placeholder="电话" required><br>
         <input class="btn" type="submit" value="注册">
     </form>
-<!--        <form action="#" class="form" id="form1">-->
-<!--            <h2 class="form_title">注册界面</h2>-->
-<!--            <input type="text" placeholder="User" class="input" />-->
-<!--            <input type="password" placeholder="Password" class="input" />-->
-<!--            <button class="btn">注册</button>-->
-<!--        </form>-->
+
     </div>
 
 <!--    登录-->
     <div class="container_form container--signin">
         <form method="post" action="{{ url_for('login') }}" class="form" >
             <h2 class="form_title">登录界面</h2>
-            <input type="text" id="account" name="account" placeholder="用户名" class="input" required>
+            <input type="text" id="account1" name="account" placeholder="用户名" class="input" required>
             <p class="message"></p>
-            <input type="password" id="password" name="password" placeholder="Password" class="input" required>
+            <input type="password" id="password1" name="password" placeholder="Password" class="input" required>
             <a href="#" class="link">Forgot your password?</a>
             <button type="submit" class="btn" onclick="location.href='{{ url_for('homelist') }}'">登录</button>
         </form>
@@ -557,15 +552,19 @@ body {
     <!-- 浮层 -->
     <div class="container_overlay">
         <div class="overlay">
-            <div class="overlay_panel overlay--left">
-                <button class="btn" id="signIn">登录界面</button>
-            </div>
             <div class="overlay_panel overlay--right">
                 <button class="btn" id="signUp">注册界面</button>
             </div>
+            <div class="overlay_panel overlay--left">
+                <button class="btn" id="signIn">登录界面</button>
+            </div>
+
         </div>
     </div>
 </div>
+
+
+
 
 <!--背景-->
 <div class="slidershow">
