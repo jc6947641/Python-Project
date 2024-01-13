@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>搜索结果</title>
+</head>
+<body>
+    <h1>搜索结果</h1>
+    {% for result in results %}
+        <div>
+            <h2>{{ result.name }}</h2>
+            <p>{{ result.id }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>
