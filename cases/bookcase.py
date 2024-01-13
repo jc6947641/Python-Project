@@ -25,7 +25,6 @@ def go_bookcase(app):
     @app.route('/insert_book_cargo', methods=['GET', 'POST'])
     def insert_book_cargo():
         user_id = session.get('user_id')
-        print(user_id)
         if request.method == 'POST':
             try:
                 # Get data from the request
@@ -113,6 +112,28 @@ def go_bookcase(app):
         except Exception as e:
             return jsonify({'success': False, 'error': str(e)})
 
+
+    @app.route('/search', methods=['GET', 'POST'])
+    def search_book():
+        # 使用 SQLAlchemy 查询数据库，尝试获取名称包含查询参数的货物
+        user_id = session.get('user_id')
+        print(user_id)
+        if request.method == 'POST':
+            query = request.form.get('keyword')
+            results =  Cargo.query.filter_by(query,owner_id=user_id, store_id='书籍').all()
+            # 如果找到了匹配的货物，将它们的名称和 ID 作为字典添加到列表中
+            return render_template('search.html', results=results)
+        else:
+            # 如果没有找到匹配的货物，返回一个错误消息
+            message = f"没有找到名称包含 '{query}' 的货物。"
+
+
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+
+class SearchForm(FlaskForm):
+    keyword = StringField('请输入产品名称...')
+    submit = SubmitField('查找产品')
 
 
 
