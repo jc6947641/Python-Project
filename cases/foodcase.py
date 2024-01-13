@@ -125,8 +125,11 @@ def go_foodcase(app):
 
         if request.method == 'POST':
             query = request.form.get('keyword')
-            results = Cargo.query.filter(Cargo.name.contains(query)).all()
+            user_id = session.get('user_id')  # 获取当前用户的 ID
+            # 在查询时添加一个过滤条件，只选择当前账号的作品
+            results = Cargo.query.filter(Cargo.name.contains(query), Cargo.owner_id == user_id).all()
             # 如果找到了匹配的货物，将它们的名称和 ID 作为字典添加到列表中
+
             return render_template('search.html', results=results)
         else:
             # 如果没有找到匹配的货物，返回一个错误消息
