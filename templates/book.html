@@ -17,6 +17,20 @@
                 {% endfor %}
             </div>
         {% endif %}
+         <div class="nav-menu"> <!--主标题-->
+        <div class="nav-title">搜索
+        </div>
+        <!--子标题-->
+            <div class="nav-content">
+            <!--创建一个表单，提交到 search 函数处理-->
+                <form action="{{ url_for('search_book') }}" method="post">
+                    <!--创建一个输入框，name 属性为 keyword，placeholder 属性为提示文字-->
+                    <input type="text" name="keyword" placeholder="请输入关键词…">
+                    <!--创建一个提交按钮，value 属性为按钮文字-->
+                    <input type="submit" value="搜索">
+                </form>
+            </div>
+        </div>
 
         <style>
     body {

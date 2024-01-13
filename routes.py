@@ -64,3 +64,21 @@ def get_data_routes(app):
     def function2():
         return render_template('function2.html')
 
+
+    @app.route('/search/<string:query>', methods=['GET'])
+    def search(query):
+        # 使用 SQLAlchemy 查询数据库，尝试获取名称包含查询参数的货物
+        results = Cargo.query.filter(Cargo.name.contains(query)).all()
+
+        if results:
+            # 如果找到了匹配的货物，将它们的名称和 ID 作为字典添加到列表中
+            results_list = [{'id': cargo.id, 'name': cargo.name} for cargo in results]
+            return jsonify({'success': True, 'results': results_list})
+        else:
+            # 如果没有找到匹配的货物，返回一个错误消息
+            message = f"没有找到名称包含 '{query}' 的货物。"
+            return jsonify({'success': False, 'message': message})
+
+
+    if __name__ == '__main__':
+        app.run(debug=True)
