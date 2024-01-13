@@ -31,32 +31,43 @@ def go_foodcase(app):
         user_id = session.get('user_id')
         print(user_id)
         if request.method == 'POST':
-            # Get data from the form
-            name = request.form.get('name')
-            num = int(request.form.get('num'))  # Convert the input to an integer
-            owner_id = user_id
-            store_id = '食品'
+            try:
+                # Get data from the request
+                data = request.get_json()
+                name = data.get('newCargoName')
+                num = int(data.get('newCargoNum'))  # Convert the input to an integer
+                owner_id = user_id
+                store_id = '食品'
 
-            # Check if the quantity is greater than 0
-            if num <= 0:
-                return render_template('insert_food_cargo.html', error="Quantity must be greater than 0")
+                # Check if the quantity is greater than 0
+                if num <= 0:
+                    return render_template('insert_food_cargo.html', error="数量必须大于0")
+                existing_cargo = Cargo.query.filter_by(name=name, owner_id=owner_id, store_id = store_id).first()
+                if existing_cargo:
+                    return jsonify(
+                        {'success': False, 'error': f"仓库中已经有 '{name}' 了，无法再添加"})
 
-            # 获取当前物品最大的ID值
-            max_id = Cargo.query.with_entities(Cargo.id).order_by(Cargo.id.desc()).first()
+                # 获取当前物品最大的ID值
+                max_id = Cargo.query.with_entities(Cargo.id).order_by(Cargo.id.desc()).first()
 
-            # 计算ID
-            new_id = max_id[0] + 1 if max_id else 1
+                # 计算ID
+                new_id = max_id[0] + 1 if max_id else 1
 
-            new_cargo = Cargo(id=new_id, name=name, num=num, owner_id=owner_id, store_id=store_id)
+                new_cargo = Cargo(id=new_id, name=name, num=num, owner_id=owner_id, store_id=store_id)
 
-            # 将物品添加到数据库表Cargo
-            db.session.add(new_cargo)
-            db.session.commit()
+                # 将物品添加到数据库表Cargo
+                db.session.add(new_cargo)
+                db.session.commit()
 
-            # 回到index页面
-            return redirect(url_for('food'))
+                # 回到index页面
+                return jsonify({'success': True})
+
+                return redirect(url_for('food'))
+            except Exception as e:
+                return jsonify({'success': False, 'error': str(e)})
 
         return render_template('insert_food_cargo.html')
+
     @app.route('/insert_food', methods=['POST'])
     def insert_food():
         try:
