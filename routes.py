@@ -1,7 +1,8 @@
 # routes.py
 
-from flask import render_template,jsonify,request,url_for,redirect
+from flask import render_template,jsonify,request,url_for,redirect,session
 from models import Cargo,db
+
 
 def get_data_routes(app):
     @app.route('/')
@@ -57,10 +58,4 @@ def get_data_routes(app):
 
     return app
 
-    @app.route('/index/function1')
-    def function1():
-        return render_template('function1.html')
-    @app.route('/index/function2')
-    def function2():
-        return render_template('function2.html')
 

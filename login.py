@@ -14,6 +14,7 @@ def userpass(app):
             password = request.form['password']
 
             # Check if the user exists in the database
+
             user = User.query.filter_by(account=account, password=password).first()
 
             if user:

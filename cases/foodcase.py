@@ -33,9 +33,10 @@ def go_foodcase(app):
         if request.method == 'POST':
             # Get data from the form
             name = request.form.get('name')
-            num = int(request.form.get('num'))  # Convert the input to an integer
+            num = str(request.form.get('num'))  # Convert the input to an integer
             owner_id = user_id
             store_id = '食品'
+
 
             # Check if the quantity is greater than 0
             if num <= 0:
