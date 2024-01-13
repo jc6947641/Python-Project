@@ -9,7 +9,7 @@
 </head>
 <body>
     <h1>食品仓库</h1>
-    <button type="button" onclick="location.href='{{ url_for('insert_food_cargo') }}'">新物品入库</button>
+     <button type="button" onclick="openPopupInsert()">新物品入库</button>
     {% if flash_messages %}
         <div class="flash-messages">
             {% for message in flash_messages %}
@@ -76,13 +76,38 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
         }
+        #popup1 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+          #popupInsert {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
     </style>
 
     <ul>
         {% for cargo in cargo_list %}
             <li>
-                物品ID: {{ cargo.id }}  名称: {{ cargo.name }} 数量:{{ cargo.num }} 使用者ID:{{ cargo.owner_id}}
+                物品ID: {{ cargo.id }}  名称: {{ cargo.name }} 数量:{{ cargo.num }} 使用者ID:{{ cargo.owner_id}} 仓库:{{cargo.store_id}}
                 <button type="button" onclick="openPopup('Insert', {{ cargo.id }})">入库</button>
+                 <button type="button" onclick="openPopup1('Delivery ', {{ cargo.id }})">出库</button>
                 <button type="button" class="delete-btn" data-cargo-id="{{ cargo.id }}">删除</button>
             </li>
         {% endfor %}
@@ -95,6 +120,26 @@
         <button type="button" onclick="submitForm()">提交</button>
         <button type="button" onclick="closePopup()">关闭</button>
     </div>
+    <div id="popup1">
+    <h2>出库操作</h2>
+    <!-- 添加文本输入框和提交按钮 -->
+    <label for="deliveryNum">出库数量:</label>
+    <input type="text" id="deliveryNum" name="deliveryNum">
+    <button type="button" onclick="submitForm1()">提交</button>
+    <button type="button" onclick="closePopup1()">关闭</button>
+</div>
+
+    <div id="popupInsert" style="display: {% if show_popup %}block{% else %}none{% endif %}">
+        <h2>新物品入库操作</h2>
+        <!-- 添加文本输入框和提交按钮 -->
+        <label for="newCargoName">物品名称:</label>
+        <input type="text" id="newCargoName" name="newCargoName" required>
+        <label for="newCargoNum">入库数量:</label>
+        <input type="text" id="newCargoNum" name="newCargoNum" required>
+        <button type="button" onclick="submitInsertForm()">提交</button>
+        <button type="button" onclick="closePopupInsert()">关闭</button>
+    </div>
+
 
     <script>
         // JavaScript 函数用于打开弹窗
@@ -121,6 +166,10 @@
         // JavaScript 函数用于处理提交按钮点击事件
         function submitForm(cargoId) {
             var cargoNum = parseInt(document.getElementById('cargoNum').value, 10);
+             if (cargoNum < 0) {
+            alert('入库数量不能小于0');
+            return;
+        }
             var data = { cargoId: cargoId, cargoNum: cargoNum };
 
             fetch('/insert_food', {
@@ -132,18 +181,24 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Server response:', data);
-                       if (data.success) {
-                // 页面刷新以显示最新的数量
-                window.location.reload();
-            }
-
-                    // Optionally update the UI if needed
-                })
-                .catch(error => {
-                    console.error('Error during fetch operation:', error);
+            console.log('Server response:', data);
+            if (data.success) {
+                // 如果成功，使用 AJAX 请求获取新的右侧内容
+                $.ajax({
+                    url: '/food',
+                    type: 'GET',
+                    success: function (newContent) {
+                        // 更新右侧内容
+                        $(".content-right").html(newContent);
+                    }
                 });
-
+            } else {
+                alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
+            }
+        })
+        .catch(error => {
+            console.error('Error during fetch operation:', error);
+        });
             closePopup();
         }
     </script>
@@ -181,6 +236,132 @@
             }
         });
     </script>
+
+    <script>
+    // JavaScript 函数用于打开出库弹窗
+    function openPopup1(action, cargoId) {
+        var popup1 = document.getElementById('popup1');
+        popup1.innerHTML = `
+            <h2>出库操作</h2>
+            <label for="deliveryNum">出库数量:</label>
+            <input type="text" id="deliveryNum" name="deliveryNum" value="">
+            <button type="button" onclick="submitForm1(${cargoId})">提交</button>
+            <button type="button" onclick="closePopup1()">关闭</button>
+        `;
+        popup1.style.display = 'block';
+    }
+
+    // JavaScript 函数用于关闭出库弹窗
+    function closePopup1() {
+        var popup1 = document.getElementById('popup1');
+        popup1.style.display = 'none';
+    }
+
+    // JavaScript 函数用于处理出库表单的提交
+    function submitForm1(cargoId) {
+        var deliveryNum = parseInt(document.getElementById('deliveryNum').value, 10);
+
+        // 检查出库数量是否小于0
+        if (deliveryNum < 0) {
+            alert('出库数量不能小于0');
+            return;
+        }
+
+        var data = { cargoId: cargoId, deliveryNum: deliveryNum };
+
+         fetch('/deliver_food', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Server response:', data);
+            if (data.success) {
+                // 如果成功，使用 AJAX 请求获取新的右侧内容
+                $.ajax({
+                    url: '/food',
+                    type: 'GET',
+                    success: function (newContent) {
+                        // 更新右侧内容
+                        $(".content-right").html(newContent);
+                    }
+                });
+            } else {
+                alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
+            }
+        })
+        .catch(error => {
+            console.error('Error during fetch operation:', error);
+        });
+
+        closePopup1();
+    }
+</script>
+
+ <script>
+        // JavaScript function to open 新物品入库 popup
+        function openPopupInsert() {
+            var popupInsert = document.getElementById('popupInsert');
+            popupInsert.innerHTML = `
+                <h2>新物品入库</h2>
+                <!-- Add入库表单元素 -->
+                <label for="newCargoName">物品名称:</label>
+                <input type="text" id="newCargoName" name="newCargoName">
+                <label for="newCargoNum">入库数量:</label>
+                <input type="text" id="newCargoNum" name="newCargoNum">
+                <button type="button" onclick="submitFormInsert()">提交</button>
+                <button type="button" onclick="closePopupInsert()">关闭</button>
+            `;
+            popupInsert.style.display = 'block';
+        }
+
+        // JavaScript function to close 新物品入库 popup
+        function closePopupInsert() {
+            var popupInsert = document.getElementById('popupInsert');
+            popupInsert.style.display = 'none';
+        }
+
+        // JavaScript function to handle 新物品入库 form submission
+        function submitFormInsert() {
+            var newCargoName = document.getElementById('newCargoName').value;
+            var newCargoNum = parseInt(document.getElementById('newCargoNum').value, 10);
+            var data = { newCargoName: newCargoName, newCargoNum: newCargoNum };
+
+            fetch('/insert_food_cargo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+            console.log('Server response:', data);
+            if (data.success) {
+                // 如果成功，使用 AJAX 请求获取新的右侧内容
+                $.ajax({
+                    url: '/food',
+                    type: 'GET',
+                    success: function (newContent) {
+                        // 更新右侧内容
+                        $(".content-right").html(newContent);
+                    }
+                });
+            } else {
+                alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
+            }
+        })
+        .catch(error => {
+            console.error('Error during fetch operation:', error);
+        });
+            closePopupInsert();
+        }
+    </script>
+
+
 
 </body>
 </html>

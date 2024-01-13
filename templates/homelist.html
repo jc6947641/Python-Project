@@ -1,204 +1,102 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Warehouse Management System</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
 
+        .content {
+            display: flex;
+        }
 
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Title</title>-->
-<!--</head>-->
-<!--    <style>-->
-<!--        button{-->
-<!--        width: 80px;-->
-<!--        height: 40px;-->
-<!--        background: black;-->
-<!--        border: none;-->
-<!--        color:white;-->
-<!--        display: block;-->
-<!--        margin-bottom: 0px}}-->
+        /* Left navigation bar */
+        .content-left {
+            width: 300px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-<!--    </style>-->
+        .left-title a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 20px;
+        }
 
-<!--<body>-->
-<!--首页-->
+        .nav-menu {
+            margin-top: 20px;
+        }
 
-<!--    <button type="button" onclick="location.href='{{ url_for('food') }}'">食品</button>-->
-<!--    <button type="button" onclick="location.href='{{ url_for('book') }}'">书籍</button>-->
-<!--    <button type="button" onclick="location.href='{{ url_for('sport') }}'">运动器材</button>-->
-<!--    <button type="button" onclick="location.href='{{ url_for('medicine') }}'">药品</button>-->
-<!--    <button type="button" onclick="location.href='{{ url_for('user') }}'">个人信息</button>-->
+        .nav-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
 
-<!--</body>-->
-<!--</html>-->
+        .nav-content a {
+            display: block;
+            padding: 10px;
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
 
-<!doctype html>
-<html lang = "en">
-    <head>
-        <meta charset = "UTF-8">
+        .nav-content a:hover {
+            background-color: #34495e;
+        }
 
-        <meta name = "viewport"
-              content = "width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv = "X-UA-Compatible" content = "ie=edge">
-        <title>Test</title>
-        <script src = "js/jquery-3.6.0.js"></script>
-        <style>
-            /*兼容浏览器*/
+        /* Right content area */
+        .content-right {
+            flex: 1;
+            padding: 20px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $(".nav-content > a").click(function (e) {
+                e.preventDefault(); // Prevent the default link behavior
 
-            * {
-                margin: 0;
-                padding: 0;
-            }
+                var contentUrl = $(this).attr("href");
 
-            .content {
-                width: 100%;
-                height: 100%;
-            }
-
-            .content-left {
-                width: 100%;
-                height: 1000px;
-                background-color: #1c232f;
-                float: left;
-            }
-
-            .left-title {
-                width: 100%;
-                height: 100px;
-                font-size:50px;
-            }
-
-            .left-title > a {
-                display: block;
-                width: 100%;
-                height: 50px;
-                line-height: 90px;
-                text-align: center;
-                color: white;
-                /*去掉a下默认下划线*/
-                text-decoration: none;
-            }
-
-            /*分割线*/
-            .seg {
-                height: 1px;
-                width: 100%;
-                background-color: black;
-            }
-
-            .nav {
-                /*上下5,左右0*/
-                margin: 5px 0;
-            }
-
-            /*菜单项主标题*/
-            .nav-title {
-                height: 40px;
-                width: 100%;
-                color: white;
-                text-align: center;
-                line-height: 40px;
-                cursor: pointer;
-
-            }
-
-            /*子标题内容区*/
-            .nav-content {
-                width: 100%;
-                height: 100%;
-                background-color: #0C1119;
-                font-size:50px;
-            }
-
-            /*子标题的样式*/
-            .nav-content > a {
-                display: block;
-                width: 100%;
-                height: 50px;
-                color: #CCCCCC;
-                text-decoration: none;
-                text-align: center;
-                line-height: 30px;
-                font-size: 20px;
-            }
-
-            /*子标题鼠标经过时的改变颜色*/
-            .nav-content > a:hover {
-                color: #FFFFFF;
-                background-color: #12040c;
-            }
-
-        </style>
-
-        <script>
-            $(function () {
-
-                //隐藏所有子标题
-                $(".nav-menu").each(function () {
-                    $(this).children(".nav-content").hide();
+                // Use AJAX to load content dynamically
+                $.ajax({
+                    url: contentUrl,
+                    success: function (data) {
+                        $(".content-right").html(data);
+                    }
                 });
-
-                //给菜单项中的所有主标题绑定事件
-                $(".nav-title").each(function () {
-                    //获取点击当前标签下所有子标签
-                    var navConEle = $(this).parents(".nav-menu").children(".nav-content");
-
-                    //绑定点击事件,判断navConEle的display这个属性是否为none,时none的话时隐藏状态
-                    $(this).click(function(){
-                        if (navConEle.css("display") != "none") {
-                            //隐藏,传参数自带动画,单位为毫秒
-                            navConEle.hide(300);
-                        } else {
-                            //显示,传参数自带动画,单位为毫秒
-                            $(".nav-menu").each(function () {
-                                $(this).children(".nav-content").hide(300);
-                            });
-                            navConEle.show(300);
-                        }
-                    });
-                });
-
-                $(".nav-content>a").each(function () {
-                    $(this).click(function () {
-                        $(".content-right").html($(this).html());
-                    });
-                });
-
             });
-        </script>
-    </head>
-    <body>
-        <div class = "content">
-            <!--左侧导航栏-->
-            <div class = "content-left">
-                <div class = "left-title">
-                    <a href = "#">仓库管理系统</a>
-                </div>
-
-                <!--水平线-->
-                <div class = "seg"></div>
-
-                <!--菜单栏导航-->
-                <div class = "nav">
-                    <!--每一个菜单栏项-->
-                    <div class = "nav-menu">
-                        <!--主标题-->
-                        <div class = "nav-title">目录</div>
-                        <!--子标题-->
-                        <div class = "nav-content">
-                            <a href = "#" onclick="location.href='{{ url_for('food') }}'">食品</a>
-                            <a href = "#" onclick="location.href='{{ url_for('book') }}'">书籍</a>
-                            <a href = "#" onclick="location.href='{{ url_for('sport') }}'">运动器材</a>
-                            <a href = "#" onclick="location.href='{{ url_for('medicine') }}'">药品</a>
-                            <a href = "#" onclick="location.href='{{ url_for('user') }}'">个人信息</a>
-                        </div>
-                    </div>
-
-
-                <!--水平线-->
-                <div class = "seg"></div>
+        });
+    </script>
+</head>
+<body>
+    <div class="content">
+        <!-- Left navigation bar -->
+        <div class="content-left">
+            <div class="left-title">
+                <a href="#">Warehouse Management System</a>
             </div>
-
+            <div class="nav-menu">
+                <div class="nav-title">Menu</div>
+                <div class="nav-content">
+                    <a href="{{ url_for('food') }}">食品</a>
+                    <a href="{{ url_for('book') }}">书籍</a>
+                    <a href="{{ url_for('sport') }}">运动器材</a>
+                    <a href="{{ url_for('medicine') }}">药品</a>
+                    <a href="{{ url_for('user') }}">个人信息</a>
+                </div>
+            </div>
         </div>
-            <!--在左侧导航栏的菜单栏下方添加一个搜索框-->
-
-    </body>
+        <!-- Right content area -->
+        <div class="content-right">
+            <!-- Content will be dynamically loaded here -->
+        </div>
+    </div>
+</body>
 </html>

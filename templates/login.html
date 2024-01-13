@@ -1,14 +1,18 @@
+
+
+<!--改2-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-       <style>
-        div{
+    <title>注册登录界面Ⅰ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+
+    <style>
+        div.container{
             width: 600px;
             margin: 100px auto;
-
         }
 
         .message{
@@ -20,54 +24,599 @@
         }
         .wrong{
             color: red;
-
-
         }
         .right{
             color: green;
-
         }
     </style>
+
+    <style>
+:root {
+	/* 颜色 */
+	--white: #e9e9e9;
+	--gray: #333;
+	--blue: #095c91;
+	--blue-r: #315a7491;
+	--lightblue: #0393a3;
+
+	/* 圆角 */
+	--button-radius: 0.7rem;
+
+	/* 大小 */
+	--max-width: 758px;
+	--max-height: 420px;
+
+	font-size: 16px;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+		Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+body {
+	align-items: center;
+	background-color: var(--white);
+	background-attachment: fixed;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	display: grid;
+	height: 100vh;
+	place-items: center;
+}
+
+.form_title {
+	font-weight: 300;
+	margin: 0;
+	margin-bottom: 1.25rem;
+}
+
+.link {
+	color: var(--gray);
+	font-size: 0.9rem;
+	margin: 1.5rem 0;
+	text-decoration: none;
+}
+
+.container {
+	background-color: var(--white);
+	border-radius: var(--button-radius);
+	box-shadow: 0 0.9rem 1.7rem rgba(0, 0, 0, 0.25),
+		0 0.7rem 0.7rem rgba(0, 0, 0, 0.22);
+	height: var(--max-height);
+	max-width: var(--max-width);
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+}
+
+.container_form {
+	height: 100%;
+	position: absolute;
+	top: 0;
+	transition: all 0.6s ease-in-out;
+}
+
+.container--signin {
+	left: 0;
+	width: 50%;
+	z-index: 5;
+}
+
+.container.right-panel-active .container--signin {
+	transform: translateX(100%);
+}
+
+.container--signup {
+	left: 0;
+	opacity: 0;
+	width: 50%;
+	z-index: 4;
+}
+
+.container.right-panel-active .container--signup {
+	-webkit-animation: show 0.6s;
+	        animation: show 0.6s;
+	opacity: 1;
+	transform: translateX(100%);
+	z-index: 8;
+}
+
+.container_overlay {
+	height: 100%;
+	left: 50%;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	transition: transform 0.6s ease-in-out;
+	width: 50%;
+	z-index: 100;
+}
+
+.container.right-panel-active .container_overlay {
+	transform: translateX(-100%);
+}
+
+.overlay {
+	background-color: rgba(255, 255, 255, 0.25);
+	background-attachment: fixed;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: 100%;
+	left: -100%;
+	position: relative;
+	transform: translateX(0);
+	transition: transform 0.6s ease-in-out;
+	width: 200%;
+}
+
+.container.right-panel-active .overlay {
+	transform: translateX(50%);
+}
+
+.overlay_panel {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	justify-content: center;
+	position: absolute;
+	text-align: center;
+	top: 0;
+	transform: translateX(0);
+	transition: transform 0.6s ease-in-out;
+	width: 50%;
+}
+
+.overlay--left {
+	transform: translateX(-20%);
+}
+
+.container.right-panel-active .overlay--left {
+	transform: translateX(0);
+}
+
+.overlay--right {
+	right: 0;
+	transform: translateX(0);
+}
+
+.container.right-panel-active .overlay--right {
+	transform: translateX(20%);
+}
+
+.btn {
+	background-color: var(--blue);
+	background-image: linear-gradient(90deg, var(--blue) 0%, var(--lightblue) 74%);
+	border-radius: 20px;
+	border: 0.2px solid var(--blue-r);
+	color: var(--white);
+	cursor: pointer;
+	font-size: 0.8rem;
+	font-weight: bold;
+	letter-spacing: 0.1rem;
+	padding: 0.9rem 4rem;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+
+.form > .btn {
+	margin-top: 1.5rem;
+}
+
+.btn:active {
+	transform: scale(0.95);
+}
+
+.btn:focus {
+	outline: none;
+}
+
+.form {
+    background-color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 3rem;
+    height: 100%;
+    text-align: center;
+}
+
+.input {
+    background-color: #fff;
+    border: none;
+    padding: 0.9rem 0.9rem;
+    margin: 0.5rem 0;
+    width: 100%;
+}
+
+@-webkit-keyframes show {
+    0%,
+    49.99% {
+        opacity: 0;
+        z-index: 4;
+    }
+
+    50%,
+    100% {
+        opacity: 1;
+        z-index: 8;
+    }
+}
+
+@keyframes show {
+    0%,
+    49.99% {
+        opacity: 0;
+        z-index: 4;
+    }
+
+    50%,
+    100% {
+        opacity: 1;
+        z-index: 8;
+    }
+}
+
+
+.slidershow {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.slidershow--image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: no-repeat 50% 50%;
+    background-size: cover;
+    -webkit-animation-name: kenburns;
+    animation-name: kenburns;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-duration: 16s;
+    animation-duration: 16s;
+    opacity: 1;
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+}
+
+.slidershow--image:nth-child(1) {
+    -webkit-animation-name: kenburns-1;
+    animation-name: kenburns-1;
+    z-index: 3;
+}
+
+.slidershow--image:nth-child(2) {
+    -webkit-animation-name: kenburns-2;
+    animation-name: kenburns-2;
+    z-index: 2;
+}
+
+.slidershow--image:nth-child(3) {
+    -webkit-animation-name: kenburns-3;
+    animation-name: kenburns-3;
+    z-index: 1;
+}
+
+.slidershow--image:nth-child(4) {
+    -webkit-animation-name: kenburns-4;
+    animation-name: kenburns-4;
+    z-index: 0;
+}
+
+@-webkit-keyframes kenburns-1 {
+    0% {
+        opacity: 1;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+    1.5625% {
+        opacity: 1;
+    }
+    23.4375% {
+        opacity: 1;
+    }
+    26.5625% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+    98.4375% {
+        opacity: 0;
+        -webkit-transform: scale(1.21176);
+        transform: scale(1.21176);
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes kenburns-1 {
+    0% {
+        opacity: 1;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+    1.5625% {
+        opacity: 1;
+    }
+    23.4375% {
+        opacity: 1;
+    }
+    26.5625% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+    98.4375% {
+        opacity: 0;
+        -webkit-transform: scale(1.21176);
+        transform: scale(1.21176);
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes kenburns-2 {
+    23.4375% {
+        opacity: 1;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+    26.5625% {
+        opacity: 1;
+    }
+    48.4375% {
+        opacity: 1;
+    }
+    51.5625% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+}
+
+@keyframes kenburns-2 {
+    23.4375% {
+        opacity: 1;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+    26.5625% {
+        opacity: 1;
+    }
+    48.4375% {
+        opacity: 1;
+    }
+    51.5625% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+}
+
+@-webkit-keyframes kenburns-3 {
+    48.4375% {
+        opacity: 1;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+    51.5625% {
+        opacity: 1;
+    }
+    73.4375% {
+        opacity: 1;
+    }
+    76.5625% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+}
+
+@keyframes kenburns-3 {
+    48.4375% {
+        opacity: 1;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+    51.5625% {
+        opacity: 1;
+    }
+    73.4375% {
+        opacity: 1;
+    }
+    76.5625% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+}
+
+@-webkit-keyframes kenburns-4 {
+    73.4375% {
+        opacity: 1;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+    76.5625% {
+        opacity: 1;
+    }
+    98.4375% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes kenburns-4 {
+    73.4375% {
+        opacity: 1;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+    76.5625% {
+        opacity: 1;
+    }
+    98.4375% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+    </style>
+
 </head>
+
 <body>
-    <h2>登录页面</h2>
+<!--登录改-->
+
+<div class="container right-panel-active">
+    <!-- 注册 -->
+    <div class="container_form container--signup">
+<!--        <h2>注册页面</h2>-->
     {% if error_message %}
         <p style="color: red;">{{ error_message }}</p>
     {% endif %}
-    <form method="post" action="{{ url_for('login') }}">
-        <div class="register">
-        <input type="text" id="account" name="account" required>
-        <p class="message "></p>
-        </div>
-
-
-        <div class="register">
-        <input type="password" id="password" name="password" required>
-        <p class="message ">请输入6~16位密码</p>
-         </div>
-        <input type="submit" value="Login">
+    <form method="post" action="{{ url_for('register') }}" class="form">
+        <h2 class="form_title">注册界面</h2>
+<!--        <label for="account">账号:</label><br>-->
+        <input type="text" id="account" name="account" placeholder="账号" required><br>
+<!--        <label for="password">密码:</label><br>-->
+        <input type="password" id="password" name="password" placeholder="密码" required><br>
+<!--         <label for="name">姓名:</label><br>-->
+        <input type="text" id="name" name="name" placeholder="姓名" required><br>
+<!--        <label for="name">住址:</label><br>-->
+        <input type="text" id="address" name="address" placeholder="住址" required><br>
+<!--        <label for="name">电话:</label><br>-->
+        <input type="text" id="tel" name="tel" placeholder="电话" required><br>
+        <input class="btn" type="submit" value="注册">
     </form>
-    <script>
-        // 首先判断的事件是表单失去焦点 onblur
-        // 如果输入正确则提示正确的信息颜色为绿色小图标变化
-        // 如果输入不是6~16位，则提示错误信息颜色为红色 小图标变化
-        // 因为里面变化样式较多，我们采取classname修改样式
+<!--        <form action="#" class="form" id="form1">-->
+<!--            <h2 class="form_title">注册界面</h2>-->
+<!--            <input type="text" placeholder="User" class="input" />-->
+<!--            <input type="password" placeholder="Password" class="input" />-->
+<!--            <button class="btn">注册</button>-->
+<!--        </form>-->
+    </div>
 
-        // 1.获取元素
-        var ipt = document.querySelector('.ipt');
-        var message = document.querySelector('.message');
-        ipt.onblur = function(){
-            if(this.value.length < 6 || this.value.length > 16){
-                message.className = 'message wrong';
-                message.innerHTML = '您输入的位数不对，要求6~16位';
-            }else{
-                message.className = 'message right';
-                message.innerHTML = '密码输入正确';
+<!--    登录-->
+    <div class="container_form container--signin">
+        <form method="post" action="{{ url_for('login') }}" class="form" >
+            <h2 class="form_title">登录界面</h2>
+            <input type="text" id="account" name="account" placeholder="用户名" class="input" required>
+            <p class="message"></p>
+            <input type="password" id="password" name="password" placeholder="Password" class="input" required>
+            <a href="#" class="link">Forgot your password?</a>
+            <button type="submit" class="btn" onclick="location.href='{{ url_for('homelist') }}'">登录</button>
+        </form>
+    </div>
+
+    <!-- 浮层 -->
+    <div class="container_overlay">
+        <div class="overlay">
+            <div class="overlay_panel overlay--left">
+                <button class="btn" id="signIn">登录界面</button>
+            </div>
+            <div class="overlay_panel overlay--right">
+                <button class="btn" id="signUp">注册界面</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--背景-->
+<div class="slidershow">
+    <div class="slidershow--image" style="background-image: url('imagine/1.jpg')"></div>
+    <div class="slidershow--image" style="background-image: url('imagine/1.jpg')"></div>
+    <div class="slidershow--image" style="background-image: url('imagine/1.jpg')"></div>
+    <div class="slidershow--image" style="background-image: url('imagine/1.jpg')"></div>
+</div>
+
+<!--onclick="location.href='{{ url_for('homelist') }}'"-->
+<script>
+    var inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+    inputs.forEach(function(input) {
+        input.addEventListener('blur', function() {
+            var message = this.nextElementSibling;
+            if (this.value.length < 6 || this.value.length > 16) {
+                message.classList.add('wrong');
+                message.classList.remove('right');
+                message.innerHTML = '位数不对，要求6~16位';
+            } else {
+                message.classList.add('right');
+                message.classList.remove('wrong');
+                message.innerHTML = '输入正确';
             }
-        }
+        });
+    });
+</script>
 
+    <script>
+        const signInBtn = document.getElementById("signIn");
+        const signUpBtn = document.getElementById("signUp");
+        const firstForm = document.getElementById("form1");
+        const secondForm = document.getElementById("form2");
+        const container = document.querySelector(".container");
 
+        signInBtn.addEventListener("click", () => {
+            container.classList.remove("right-panel-active");
+        });
+
+        signUpBtn.addEventListener("click", () => {
+            container.classList.add("right-panel-active");
+        });
+
+        firstForm.addEventListener("submit", (e) => e.preventDefault());
+        secondForm.addEventListener("submit", (e) => e.preventDefault());
     </script>
-<a href="{{ url_for('register') }}">注册</a>
+<!--<a href="{{ url_for('register') }}">注册</a>-->
 </body>
 </html>
+
+
+
+
+
