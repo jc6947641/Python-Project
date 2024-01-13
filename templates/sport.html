@@ -201,17 +201,24 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Server response:', data);
-                       if (data.success) {
-                // 页面刷新以显示最新的数量
-                window.location.reload();
-            }
-
-                    // Optionally update the UI if needed
-                })
-                .catch(error => {
-                    console.error('Error during fetch operation:', error);
+            console.log('Server response:', data);
+            if (data.success) {
+                // 如果成功，使用 AJAX 请求获取新的右侧内容
+                $.ajax({
+                    url: '/sport',
+                    type: 'GET',
+                    success: function (newContent) {
+                        // 更新右侧内容
+                        $(".content-right").html(newContent);
+                    }
                 });
+            } else {
+                alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
+            }
+        })
+        .catch(error => {
+            console.error('Error during fetch operation:', error);
+        });
 
             closePopup();
         }
@@ -257,14 +264,20 @@
             body: JSON.stringify(data),
         })
         .then(response => response.json())
-        .then(data => {
+       .then(data => {
             console.log('Server response:', data);
             if (data.success) {
-                // 页面刷新以显示最新的数量
-                window.location.reload();
+                // 如果成功，使用 AJAX 请求获取新的右侧内容
+                $.ajax({
+                    url: '/sport',
+                    type: 'GET',
+                    success: function (newContent) {
+                        // 更新右侧内容
+                        $(".content-right").html(newContent);
+                    }
+                });
             } else {
-                // 处理错误信息
-                alert(data.error);
+                alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
             }
         })
         .catch(error => {
@@ -311,19 +324,25 @@
                 body: JSON.stringify(data),
             })
             .then(response => response.json())
-            .then(data => {
-                console.log('Server response:', data);
-                if (data.success) {
-                // 页面刷新以显示最新的数量
-                window.location.reload();
-                 } else {
-                // 处理错误信息
-                alert(data.error);
+          .then(data => {
+            console.log('Server response:', data);
+            if (data.success) {
+                // 如果成功，使用 AJAX 请求获取新的右侧内容
+                $.ajax({
+                    url: '/sport',
+                    type: 'GET',
+                    success: function (newContent) {
+                        // 更新右侧内容
+                        $(".content-right").html(newContent);
+                    }
+                });
+            } else {
+                alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
             }
-            })
-            .catch(error => {
-                console.error('Error during fetch operation:', error);
-            });
+        })
+        .catch(error => {
+            console.error('Error during fetch operation:', error);
+        });
 
             closePopupInsert();
         }

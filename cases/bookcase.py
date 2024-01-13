@@ -67,24 +67,23 @@ def go_bookcase(app):
     @app.route('/insert_book', methods=['POST'])
     def insert_book():
         try:
-            # Get data from the request
+            # 获取数据
             data = request.get_json()
             cargo_id = data.get('cargoId')
-            cargo_num = int(data.get('cargoNum'))  # Convert cargo_num to an integer
+            cargo_num = int(data.get('cargoNum'))
 
-            # Retrieve the cargo record from the database using cargo_id
+            # 获取数据库中的货物记录
             current_cargo = Cargo.query.filter_by(id=cargo_id).first()
 
-            # Update the cargo quantity
+            # 更新货物数量
             if current_cargo:
                 current_cargo.num += cargo_num
-
-                # Commit the changes to the database
                 db.session.commit()
 
+                # 返回成功响应
                 return jsonify({'success': True})
             else:
-                return jsonify({'success': False, 'error': 'Cargo not found'})
+                return jsonify({'success': False, 'error': '货物不存在'})
         except Exception as e:
             return jsonify({'success': False, 'error': str(e)})
 

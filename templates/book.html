@@ -180,37 +180,44 @@
         }
 
         // JavaScript 函数用于处理提交按钮点击事件
-        function submitForm(cargoId) {
-            var cargoNum = parseInt(document.getElementById('cargoNum').value, 10);
-             if (cargoNum < 0) {
+   function submitForm(cargoId) {
+        var cargoNum = parseInt(document.getElementById('cargoNum').value, 10);
+        if (cargoNum < 0) {
             alert('入库数量不能小于0');
             return;
         }
-            var data = { cargoId: cargoId, cargoNum: cargoNum };
+        var data = { cargoId: cargoId, cargoNum: cargoNum };
 
-            fetch('/insert_book', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Server response:', data);
-                       if (data.success) {
-                // 页面刷新以显示最新的数量
-                window.location.reload();
-            }
-
-                    // Optionally update the UI if needed
-                })
-                .catch(error => {
-                    console.error('Error during fetch operation:', error);
+        fetch('/insert_book', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Server response:', data);
+            if (data.success) {
+                // 如果成功，使用 AJAX 请求获取新的右侧内容
+                $.ajax({
+                    url: '/book',
+                    type: 'GET',
+                    success: function (newContent) {
+                        // 更新右侧内容
+                        $(".content-right").html(newContent);
+                    }
                 });
+            } else {
+                alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
+            }
+        })
+        .catch(error => {
+            console.error('Error during fetch operation:', error);
+        });
 
-            closePopup();
-        }
+        closePopup();
+    }
     </script>
 
     <script>
@@ -256,11 +263,17 @@
         .then(data => {
             console.log('Server response:', data);
             if (data.success) {
-                // 页面刷新以显示最新的数量
-                window.location.reload();
+                // 如果成功，使用 AJAX 请求获取新的右侧内容
+                $.ajax({
+                    url: '/book',
+                    type: 'GET',
+                    success: function (newContent) {
+                        // 更新右侧内容
+                        $(".content-right").html(newContent);
+                    }
+                });
             } else {
-                // 处理错误信息
-                alert(data.error);
+                alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
             }
         })
         .catch(error => {
@@ -307,19 +320,25 @@
                 body: JSON.stringify(data),
             })
             .then(response => response.json())
-            .then(data => {
-                console.log('Server response:', data);
-                if (data.success) {
-                // 页面刷新以显示最新的数量
-                window.location.reload();
-                 } else {
-                // 处理错误信息
-                alert(data.error);
+           .then(data => {
+            console.log('Server response:', data);
+            if (data.success) {
+                // 如果成功，使用 AJAX 请求获取新的右侧内容
+                $.ajax({
+                    url: '/book',
+                    type: 'GET',
+                    success: function (newContent) {
+                        // 更新右侧内容
+                        $(".content-right").html(newContent);
+                    }
+                });
+            } else {
+                alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
             }
-            })
-            .catch(error => {
-                console.error('Error during fetch operation:', error);
-            });
+        })
+        .catch(error => {
+            console.error('Error during fetch operation:', error);
+        });
 
             closePopupInsert();
         }
