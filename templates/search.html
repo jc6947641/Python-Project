@@ -2,14 +2,38 @@
 <html>
 <head>
     <title>搜索结果</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .result {
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .result h2 {
+            margin: 0;
+            color: #333;
+        }
+        .result p {
+            margin: 5px 0;
+        }
+    </style>
 </head>
 <body>
     <h1>搜索结果</h1>
     {% for result in results %}
-        <div>
-            <h2>{{ result.name }}</h2>
-            <p>{{ result.id }}</p>
+        <div class="result">
+            <p>物品ID: {{ result.id }}  名称: {{ result.name }} 数量:{{ result.num }} 使用者ID:{{ result.owner_id}} 仓库:{{result.store_id}}</p>
         </div>
     {% endfor %}
+<button onclick="goBack()">返回</button>
+
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
 </body>
 </html>
