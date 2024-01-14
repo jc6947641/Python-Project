@@ -5,6 +5,7 @@ from models import db, User
 
 # Assuming you have a User model defined in models.py
 
+
 def userpass(app):
     @app.route('/', methods=['GET', 'POST'])
     def login():
@@ -13,17 +14,18 @@ def userpass(app):
             account = request.form['account']
             password = request.form['password']
 
-            # Check if the user exists in the database
+            # Check if both account and password are provided
+            if not account or not password:
+                error_message = "Please provide both account and password."
+                return render_template('login.html', error_message=error_message)
 
+            # Check if the user exists in the database
             user = User.query.filter_by(account=account, password=password).first()
 
             if user:
                 # Login successful, get the user ID
                 user_id = user.id
                 session['user_id'] = user_id
-
-                # 重定向到 index.html 或任何其他路由
-                return redirect(url_for('homelist'))
 
                 # Redirect to index.html or any other route with the user ID
                 return redirect(url_for('homelist', user_id=user_id))
@@ -34,7 +36,6 @@ def userpass(app):
 
         # If it's a GET request, render the login form
         return render_template('login.html')
-
     # Define your other routes here
 def register(app):
     @app.route('/register', methods=['GET', 'POST'], endpoint='register')
