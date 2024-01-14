@@ -19,7 +19,7 @@ app.config['SECRET_KEY'] = secret_key  # 使用生成的随机密钥
 HOSTNAME = '127.0.0.1'
 PORT = '3306'
 USERNAME = 'root'
-PASSWORD = 'ran040927'
+PASSWORD = '123456'
 DATABASE = 'store_management'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8mb4'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
