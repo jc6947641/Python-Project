@@ -4,13 +4,25 @@
     <meta charset="UTF-8">
     <title>user</title>
 </head>
+  <style>
+			button{
+				width: 100px;
+				height: 40px;
+				background: #FFFFFF;
+                border:#00000;
+				color: black;
+				font-size: 16px;
+			}
+
+
+	</style>
 <body>
 个人信息
   <ul>
             {% for user in user_list %}
                 <li>
                     ID: {{ user.id }}  名称: {{ user.name }} 地址:{{ user.address }} 电话:{{user.tel}}
-                    <button type="button" onclick="location.href='{{ url_for('alter_user') }}'">修改个人信息</button>
+                    <button type="button" onclick="location.href='{{ url_for('alter_user') }}'">修改信息</button>
                 </li>
             {% endfor %}
 

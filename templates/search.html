@@ -18,7 +18,6 @@
         {% endfor %}
     </div>
     {% endif %}
-
     <style>
 
         button{
@@ -43,7 +42,7 @@
             z-index: 1000;
         }
 
-        #popup7 {
+        #popup1 {
             display: none;
             position: fixed;
             top: 50%;
@@ -201,14 +200,14 @@
         <button type="button" onclick="submitForm()">提交</button>
         <button type="button" onclick="closePopup()">关闭</button>
     </div>
-    <div id="popup7">
-        <h2>出库操作</h2>
-        <!-- 添加文本输入框和提交按钮 -->
-        <label for="deliveryNum">出库数量:</label>
-        <input type="text" id="deliveryNum" name="deliveryNum">
-        <button type="button" onclick="submitForm1()">提交</button>
-        <button type="button" onclick="closePopup7()">关闭</button>
-    </div>
+     <div id="popup1">
+    <h2>出库操作</h2>
+    <!-- 添加文本输入框和提交按钮 -->
+    <label for="deliveryNum">出库数量:</label>
+    <input type="text" id="deliveryNum" name="deliveryNum">
+    <button type="button" onclick="submitForm1()">提交</button>
+    <button type="button" onclick="closePopup1()">关闭</button>
+</div>
 
     <button id="return-btn" onclick="goBack()">返回</button>
 
@@ -306,72 +305,67 @@
     </script>
 
     <script>
-        // JavaScript 函数用于打开出库弹窗
-        function openPopup7(action, cargoId) {
-            var popup7 = document.getElementById('popup7');
-            popup7.innerHTML = `
+   // JavaScript 函数用于打开出库弹窗
+    function openPopup1(action, cargoId) {
+        var popup1 = document.getElementById('popup1');
+        popup1.innerHTML = `
             <h2>出库操作</h2>
             <label for="deliveryNum">出库数量:</label>
             <input type="text" id="deliveryNum" name="deliveryNum" value="">
             <button type="button" onclick="submitForm1(${cargoId})">提交</button>
-            <button type="button" onclick="closePopup7()">关闭</button>
+            <button type="button" onclick="closePopup1()">关闭</button>
         `;
-            popup7.style.display = 'block';
+        popup1.style.display = 'block';
+    }
+
+    // JavaScript 函数用于关闭出库弹窗
+    function closePopup1() {
+        var popup1 = document.getElementById('popup1');
+        popup1.style.display = 'none';
+    }
+
+    // JavaScript 函数用于处理出库表单的提交
+    function submitForm1(cargoId) {
+        var deliveryNum = parseInt(document.getElementById('deliveryNum').value, 10);
+
+        // 检查出库数量是否小于0
+        if (deliveryNum < 0) {
+            alert('出库数量不能小于0');
+            return;
         }
 
-        // JavaScript 函数用于关闭出库弹窗
-        function closePopup7() {
-            var popup7 = document.getElementById('popup7');
-            popup7.style.display = 'none';
-        }
+        var data = { cargoId: cargoId, deliveryNum: deliveryNum };
 
-        function submitForm1(cargoId) {
-            var deliveryNum = parseInt(document.getElementById('deliveryNum').value, 10);
-
-            // 检查出库数量是否小于0
-            if (deliveryNum < 0) {
-                alert('出库数量不能小于0');
-                return;
+         fetch('/deliver_cargo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Server response:', data);
+            if (data.success) {
+                // 如果成功，使用 AJAX 请求获取新的右侧内容
+                window.location.reload()
+            } else {
+                alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
             }
+        })
+        .catch(error => {
+            console.error('Error during fetch operation:', error);
+        });
 
-            var data = { cargoId: cargoId, deliveryNum: deliveryNum };
-
-            fetch('/deliver_cargo', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Server response:', data);
-                    if (data.success) {
-                        // 如果成功，使用 AJAX 请求获取新的右侧内容
-                        $.ajax({
-                            url: '/search',
-                            type: 'GET',
-                            success: function (newContent) {
-                                // 更新右侧内容
-                                window.location.reload()
-                            }
-                        });
-                    } else {
-                        alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during fetch operation:', error);
-                });
-
-            closePopup7();
-        }
+        closePopup1();
+    }
 
         // JavaScript 函数用于返回按钮点击事件
         function goBack() {
             // 这里可以实现返回逻辑，比如返回上一页
             window.location.href = 'http://127.0.0.1:5000/homelist';
         }
+
     </script>
 
 </body>
