@@ -1,39 +1,373 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>搜索结果</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .result {
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .result h2 {
-            margin: 0;
-            color: #333;
-        }
-        .result p {
-            margin: 5px 0;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index Page</title>
+    <!-- Add jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
+
 <body>
     <h1>搜索结果</h1>
-    {% for result in results %}
-        <div class="result">
-            <p>物品ID: {{ result.id }}  名称: {{ result.name }} 数量:{{ result.num }} 使用者ID:{{ result.owner_id}} 仓库:{{result.store_id}}</p>
-        </div>
-    {% endfor %}
-<button onclick="goBack()">返回</button>
+    {% if flash_messages %}
+    <div class="flash-messages">
+        {% for message in flash_messages %}
+        <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <style>
 
-<script>
-function goBack() {
-  window.history.back();
+        button{
+				width: 100px;
+				height: 40px;
+				background: #FFFFFF;
+                border:#00000;
+				color: black;
+				font-size: 16px;
+			}
+
+        #popup6 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        #popup1 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        #return-btn {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        }
+    </style>
+
+    <style>
+    .custom-ul {
+        list-style: none; /* 取消列表默认样式 */
+        margin: 0;
+        padding: 0;
+    }
+
+    .custom-ul li {
+        display: flex;
+        justify-content: space-between; /* 将元素定位在左侧和右侧 */
+        align-items: center; /* 居中对齐元素 */
+        margin-bottom: 10px; /* 下边距为 10px */
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .custom-ul li button {
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 10px 20px;
+    }
+
+    .custom-ul li button:first-child {
+        background-color: #2196F3; /* 入库按钮的背景色 */
+    }
+
+    .custom-ul li button:nth-child(2) {
+        background-color: #FFC107; /* 出库按钮的背景色 */
+    }
+
+    .custom-ul li button:last-child {
+        background-color: #f44336; /* 删除按钮的背景色 */
+    }
+
+    .custom-ul li button:hover {
+        background-color: #555; /* 鼠标悬停时的背景色 */
+    }
+
+    .custom-ul li span {
+        font-weight: bold;
+    }
+
+
 }
-</script>
+</style>
+<style>
+    h1 {
+        text-align: center; /* Center the heading */
+    }
+</style>
+
+        <style>
+    .custom-ul {
+        list-style: none; /* 取消列表默认样式 */
+        margin: 0;
+        padding: 0;
+    }
+
+    .custom-ul li {
+        display: flex;
+        justify-content: space-between; /* 将元素定位在左侧和右侧 */
+        align-items: center; /* 居中对齐元素 */
+        margin-bottom: 10px; /* 下边距为 10px */
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .custom-ul li button {
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 10px 20px;
+    }
+
+    .custom-ul li button:first-child {
+        background-color: #2196F3; /* 入库按钮的背景色 */
+    }
+
+    .custom-ul li button:nth-child(2) {
+        background-color: #FFC107; /* 出库按钮的背景色 */
+    }
+
+    .custom-ul li button:last-child {
+        background-color: #f44336; /* 删除按钮的背景色 */
+    }
+
+    .custom-ul li button:hover {
+        background-color: #555; /* 鼠标悬停时的背景色 */
+    }
+
+    .custom-ul li span {
+        font-weight: bold;
+    }
+
+
+}
+</style>
+
+   <ul class="custom-ul">
+        {% for cargo in cargo_list %}
+            <li>
+
+                <span class="key">物品ID:</span><span class="value">{{ cargo.id }}</span>
+                <span class="key">名称:</span><span class="value">{{ cargo.name }}</span>
+                <span class="key">数量:</span><span class="value">{{ cargo.num }}</span>
+                <span class="key">类别:</span><span class="value">{{ cargo.store_id }}</span>
+                <button type="button" onclick="openPopup('Insert', {{ cargo.id }})">入库</button>
+                <button type="button" onclick="openPopup1('Delivery ', {{ cargo.id }})">出库</button>
+                <button type="button" class="delete-btn" data-cargo-id="{{ cargo.id }}">删除</button>
+
+            </li>
+        {% endfor %}
+    </ul>
+    <div id="popup6">
+        <h2>入库操作</h2>
+        <!-- 添加文本输入框和提交按钮 -->
+        <label for="cargoNum">入库数量:</label>
+        <input type="text" id="cargoNum" name="cargoNum">
+        <button type="button" onclick="submitForm()">提交</button>
+        <button type="button" onclick="closePopup()">关闭</button>
+    </div>
+     <div id="popup1">
+    <h2>出库操作</h2>
+    <!-- 添加文本输入框和提交按钮 -->
+    <label for="deliveryNum">出库数量:</label>
+    <input type="text" id="deliveryNum" name="deliveryNum">
+    <button type="button" onclick="submitForm1()">提交</button>
+    <button type="button" onclick="closePopup1()">关闭</button>
+</div>
+
+    <button id="return-btn" onclick="goBack()">返回</button>
+
+    <script>
+        // Attach click event to delete buttons
+        $('.delete-btn').on('click', function () {
+            var cargoId = $(this).data('cargo-id');
+            if (confirm('确定删除该货物吗？')) {
+                // Send AJAX request to delete_cargo route
+                $.ajax({
+                    url: '/delete_cargo/' + cargoId,
+                    type: 'POST',
+                    success: function (response) {
+                        if (response.success) {
+                            // Remove the deleted item from the list
+                            $('li:contains("' + cargoId + '")').remove();
+                            alert(response.message); // Show success message
+                        } else {
+                            alert(response.message); // Show error message
+                        }
+                    }
+                });
+            }
+        });
+
+        // Show success message and reload the page after successful insertion
+        $(document).ready(function () {
+            var successMessage = "{{ success_message }}";
+            if (successMessage) {
+                alert(successMessage);
+                window.location.reload();
+            }
+        });
+
+        // JavaScript 函数用于打开弹窗
+        function openPopup(action, cargoId) {
+            var popup = document.getElementById('popup6');
+            popup.innerHTML = `
+                <h2>入库操作</h2>
+                <label for="cargoNum">入库数量:</label>
+                <input type="text" id="cargoNum" name="cargoNum" value="">
+                <button type="button" onclick="submitForm(${cargoId})">提交</button>
+                <button type="button" onclick="closePopup()">关闭</button>
+            `;
+            popup.style.display = 'block';
+        }
+
+        // JavaScript 函数用于关闭弹窗
+        function closePopup() {
+            // 获取弹窗元素
+            var popup = document.getElementById('popup6');
+            // 隐藏弹窗
+            popup.style.display = 'none';
+        }
+
+        // JavaScript 函数用于处理提交按钮点击事件
+        function submitForm(cargoId) {
+            var cargoNum = parseInt(document.getElementById('cargoNum').value, 10);
+            if (cargoNum < 0) {
+                alert('入库数量不能小于0');
+                return;
+            }
+            var data = { cargoId: cargoId, cargoNum: cargoNum };
+
+            fetch('/insert_cargo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Server response:', data);
+                    if (data.success) {
+                        // 如果成功，使用 AJAX 请求获取新的右侧内容
+                        $.ajax({
+                            url: '/search',
+                            type: 'GET',
+                            success: function (newContent) {
+                                // 更新右侧内容
+                                window.location.reload()
+                            }
+                        });
+                    } else {
+                        alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during fetch operation:', error);
+                });
+            closePopup();
+        }
+
+    </script>
+
+    <script>
+   // JavaScript 函数用于打开出库弹窗
+    function openPopup1(action, cargoId) {
+        var popup1 = document.getElementById('popup1');
+        popup1.innerHTML = `
+            <h2>出库操作</h2>
+            <label for="deliveryNum">出库数量:</label>
+            <input type="text" id="deliveryNum" name="deliveryNum" value="">
+            <button type="button" onclick="submitForm1(${cargoId})">提交</button>
+            <button type="button" onclick="closePopup1()">关闭</button>
+        `;
+        popup1.style.display = 'block';
+    }
+
+    // JavaScript 函数用于关闭出库弹窗
+    function closePopup1() {
+        var popup1 = document.getElementById('popup1');
+        popup1.style.display = 'none';
+    }
+
+    // JavaScript 函数用于处理出库表单的提交
+    function submitForm1(cargoId) {
+        var deliveryNum = parseInt(document.getElementById('deliveryNum').value, 10);
+
+        // 检查出库数量是否小于0
+        if (deliveryNum < 0) {
+            alert('出库数量不能小于0');
+            return;
+        }
+
+        var data = { cargoId: cargoId, deliveryNum: deliveryNum };
+
+         fetch('/deliver_cargo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Server response:', data);
+            if (data.success) {
+                // 如果成功，使用 AJAX 请求获取新的右侧内容
+                window.location.reload()
+            } else {
+                alert('操作失败: ' + data.error);  // 如果失败，显示错误消息
+            }
+        })
+        .catch(error => {
+            console.error('Error during fetch operation:', error);
+        });
+
+        closePopup1();
+    }
+
+        // JavaScript 函数用于返回按钮点击事件
+        function goBack() {
+            // 这里可以实现返回逻辑，比如返回上一页
+            window.location.href = 'http://127.0.0.1:5000/homelist';
+        }
+
+    </script>
+
 </body>
+
 </html>

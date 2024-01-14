@@ -1,7 +1,8 @@
 # routes.py
 
-from flask import render_template,jsonify,request,url_for,redirect
+from flask import render_template,jsonify,request,url_for,redirect,session
 from models import Cargo,db
+
 
 def get_data_routes(app):
     @app.route('/')
@@ -31,54 +32,44 @@ def get_data_routes(app):
             message = f"删除失败，找不到货物(ID: {cargo_id})。"
             return jsonify({'success': False, 'message': message})
 
-    @app.route('/insert_cargo', methods=['GET', 'POST'])
-    def insert_cargo():
-
+    @app.route('/search', methods=['GET', 'POST'])
+    def search_food():
         if request.method == 'POST':
-            # Get data from the form
-            id = request.form.get('id')
-            name = request.form.get('name')
-            num = request.form.get('num')
-            owner_id = request.form.get('owner_id')
-            store_id = request.form.get('store_id')
+            query = request.form.get('keyword')
+            user_id = session.get('user_id')  # Get the current user's ID from the session
 
-            new_cargo = Cargo(id = id ,name=name, num=num, owner_id=owner_id, store_id=store_id)
+            # When using filter, you can combine conditions using and_ from SQLAlchemy
+            cargo_list = Cargo.query.filter(Cargo.name.contains(query), Cargo.owner_id == user_id).all()
 
-            # Add the new cargo to the database
-            db.session.add(new_cargo)
-            db.session.commit()
-
-            message = "成功插入货物！"
-            return jsonify({'success': True, 'message': message})
-
-        return render_template('insert_cargo.html')
-
-
-
-    return app
-
-    @app.route('/index/function1')
-    def function1():
-        return render_template('function1.html')
-    @app.route('/index/function2')
-    def function2():
-        return render_template('function2.html')
-
-
-    @app.route('/search/<string:query>', methods=['GET'])
-    def search(query):
-        # 使用 SQLAlchemy 查询数据库，尝试获取名称包含查询参数的货物
-        results = Cargo.query.filter(Cargo.name.contains(query)).all()
-
-        if results:
-            # 如果找到了匹配的货物，将它们的名称和 ID 作为字典添加到列表中
-            results_list = [{'id': cargo.id, 'name': cargo.name} for cargo in results]
-            return jsonify({'success': True, 'results': results_list})
+            # If matching cargos are found, add their names and IDs to a dictionary and pass it to the template
+            return render_template('search.html', cargo_list=cargo_list, query=query)
         else:
-            # 如果没有找到匹配的货物，返回一个错误消息
-            message = f"没有找到名称包含 '{query}' 的货物。"
-            return jsonify({'success': False, 'message': message})
+            query = request.args.get('search_query')  # Get the query parameter
+            if not query:
+                message = "搜索查询为空。"
+                return render_template('search.html', message=message)
+
+            # Again, use and_ to combine conditions
+            user_id = session.get('user_id')
+            cargo_list = Cargo.query.filter(Cargo.name.contains(query), Cargo.owner_id == user_id).all()
+
+            if not cargo_list:
+                message = f"没有找到名称包含 '{query}' 的货物。"
+                return render_template('search.html', message=message)
+
+            return render_template('search.html', cargo_list=cargo_list, query=query)
 
 
-    if __name__ == '__main__':
-        app.run(debug=True)
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+
+
+class SearchForm(FlaskForm):
+    keyword = StringField('请输入产品名称...')
+    submit = SubmitField('查找产品')
+
+
+
+
+
+

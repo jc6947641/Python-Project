@@ -1,25 +1,20 @@
-from flask import Flask, request, render_template
-from models import db, Cargo  # 假设你有一个名为 Cargo 的模型
-from login import userpass, register
+from flask import Flask
+from models import db
+from login import userpass, register  # 导入新的函数
 from routes import get_data_routes
 from cases.foodcase import go_foodcase
 from cases.bookcase import go_bookcase
 from cases.sportcase import go_sportcase
 from cases.medicinecase import go_medicinecase
 from cases.user import go_user
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from cases.search_function import go_search_function
 import secrets
 
-class SearchForm(FlaskForm):
-    query = StringField('关键词', validators=[DataRequired()])
-    submit = SubmitField('搜索')
 
 secret_key = secrets.token_hex(16)
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = secret_key
+app.config['SECRET_KEY'] = secret_key  # 使用生成的随机密钥
 
 HOSTNAME = '127.0.0.1'
 PORT = '3306'
@@ -31,13 +26,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 userpass(app)
-register(app)
+register(app)  # 调用新的函数
 get_data_routes(app)
-go_foodcase(app)
-go_bookcase(app)
-go_sportcase(app)
+go_foodcase(app)  # 食品仓库
+go_bookcase(app)  # 书籍仓库
+go_sportcase(app)  # 运动器材仓库
 go_medicinecase(app)
 go_user(app)
+go_search_function(app)
 
 
 if __name__ == '__main__':
