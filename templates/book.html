@@ -58,18 +58,75 @@
         }
      </style>
 
-        <ul>
-        {% for cargo in cargo_list %}
-            <li>
-                物品ID: {{ cargo.id }}  名称: {{ cargo.name }} 数量:{{ cargo.num }} 使用者ID:{{ cargo.owner_id}}
-                <button type="button" onclick="openPopup('Insert', {{ cargo.id }})">入库</button>
-                 <button type="button" onclick="openPopup1('Delivery ', {{ cargo.id }})">出库</button>
-                <button type="button" class="delete-btn" data-cargo-id="{{ cargo.id }}">删除</button>
-            </li>
-        {% endfor %}
-    </ul>
+<style>
+    .custom-ul {
+        list-style: none; /* 取消列表默认样式 */
+        margin: 0;
+        padding: 0;
+    }
+
+    .custom-ul li {
+        display: flex;
+        justify-content: space-between; /* 将元素定位在左侧和右侧 */
+        align-items: center; /* 居中对齐元素 */
+        margin-bottom: 10px; /* 下边距为 10px */
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .custom-ul li button {
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 10px 20px;
+    }
+
+    .custom-ul li button:first-child {
+        background-color: #2196F3; /* 入库按钮的背景色 */
+    }
+
+    .custom-ul li button:nth-child(2) {
+        background-color: #FFC107; /* 出库按钮的背景色 */
+    }
+
+    .custom-ul li button:last-child {
+        background-color: #f44336; /* 删除按钮的背景色 */
+    }
+
+    .custom-ul li button:hover {
+        background-color: #555; /* 鼠标悬停时的背景色 */
+    }
+
+    .custom-ul li span {
+        font-weight: bold;
+    }
+
+
+}
+</style>
+
+<ul class="custom-ul">
+    {% for cargo in cargo_list %}
+        <li>
+            <span class="key">物品ID:</span><span class="value">{{ cargo.id }}</span>
+            <span class="key">名称:</span><span class="value">{{ cargo.name }}</span>
+            <span class="key">数量:</span><span class="value">{{ cargo.num }}</span>
+            <span class="key">使用者ID:</span><span class="value">{{ cargo.owner_id }}</span>
+            <button type="button" onclick="openPopup('Insert', {{ cargo.id }})">入库</button>
+            <button type="button" onclick="openPopup1('Delivery ', {{ cargo.id }})">出库</button>
+            <button type="button" class="delete-btn" data-cargo-id="{{ cargo.id }}">删除</button>
+        </li>
+    {% endfor %}
+</ul>
+
+
     <div id="popup">
-        <h2>入库操作</h2>
+        <h2 class=".custom-ul li">入库操作</h2>
         <!-- 添加文本输入框和提交按钮 -->
         <label for="cargoNum">入库数量:</label>
         <input type="text" id="cargoNum" name="cargoNum">
@@ -85,7 +142,7 @@
     <button type="button" onclick="closePopup1()">关闭</button>
 </div>
     <div id="popupInsert" style="display: {% if show_popup %}block{% else %}none{% endif %}">
-        <h2>新物品入库操作</h2>
+        <h2 >新物品入库操作</h2>
         <!-- 添加文本输入框和提交按钮 -->
         <label for="newCargoName">物品名称:</label>
         <input type="text" id="newCargoName" name="newCargoName" required>
@@ -158,7 +215,7 @@
         }
         var data = { cargoId: cargoId, cargoNum: cargoNum };
 
-        fetch('/insert_book', {
+        fetch('/insert_cargo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -222,7 +279,7 @@
 
         var data = { cargoId: cargoId, deliveryNum: deliveryNum };
 
-         fetch('/deliver_book', {
+         fetch('/deliver_cargo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

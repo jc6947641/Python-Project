@@ -7,6 +7,7 @@ from cases.bookcase import go_bookcase
 from cases.sportcase import go_sportcase
 from cases.medicinecase import go_medicinecase
 from cases.user import go_user
+from cases.search_function import go_search_function
 import secrets
 
 
@@ -18,7 +19,7 @@ app.config['SECRET_KEY'] = secret_key  # 使用生成的随机密钥
 HOSTNAME = '127.0.0.1'
 PORT = '3306'
 USERNAME = 'root'
-PASSWORD = 'ran040927'
+PASSWORD = '123456'
 DATABASE = 'store_management'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8mb4'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -32,6 +33,7 @@ go_bookcase(app)  # 书籍仓库
 go_sportcase(app)  # 运动器材仓库
 go_medicinecase(app)
 go_user(app)
+go_search_function(app)
 
 
 if __name__ == '__main__':

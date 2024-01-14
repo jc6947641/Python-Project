@@ -1,18 +1,14 @@
 from flask import render_template,jsonify,request,url_for,redirect,session
 from models import Cargo,db
-
-
 def go_foodcase(app):
-
     @app.route('/food')
     def food():
         # Get the user_id from the session
         user_id = session.get('user_id')
-
         # Check if user_id is present in the session
         if user_id is not None:
             # Fetch cargo records from the database where owner_id is equal to user_id
-            cargo_list = Cargo.query.filter_by(owner_id=user_id,store_id = '食品').all()
+            cargo_list = Cargo.query.filter_by(owner_id=user_id, store_id='食品').all()
 
             # Get the maximum ID value from the Cargo records
             max_id = Cargo.query.with_entities(Cargo.id).order_by(Cargo.id.desc()).first()
@@ -31,30 +27,42 @@ def go_foodcase(app):
         user_id = session.get('user_id')
         print(user_id)
         if request.method == 'POST':
-            # Get data from the form
-            name = request.form.get('name')
-            num = str(request.form.get('num'))  # Convert the input to an integer
-            owner_id = user_id
-            store_id = '食品'
+            try:
+                # Get data from the request
+                data = request.get_json()
+                name = data.get('newCargoName')
+                num = int(data.get('newCargoNum'))  # Convert the input to an integer
+                owner_id = user_id
+                store_id = '食品'
 
+                # Check if the quantity is greater than 0
+                if num <= 0:
+                    return render_template('insert_food_cargo.html', error="数量必须大于0")
+                existing_cargo = Cargo.query.filter_by(name=name, owner_id=owner_id,store_id = store_id).first()
+                if existing_cargo:
+                    return jsonify(
+                        {'success': False, 'error': f"仓库中已经有 '{name}' 了，无法再添加"})
 
-            # Check if the quantity is greater than 0
-            if num <= 0:
-                return render_template('insert_food_cargo.html', error="Quantity must be greater than 0")
+                # 获取当前物品最大的ID值
+                max_id = Cargo.query.with_entities(Cargo.id).order_by(Cargo.id.desc()).first()
 
-            # 获取当前物品最大的ID值
-            max_id = Cargo.query.with_entities(Cargo.id).order_by(Cargo.id.desc()).first()
+                # 计算ID
+                new_id = max_id[0] + 1 if max_id else 1
 
-            # 计算ID
-            new_id = max_id[0] + 1 if max_id else 1
+                new_cargo = Cargo(id=new_id, name=name, num=num, owner_id=owner_id, store_id=store_id)
 
-            new_cargo = Cargo(id=new_id, name=name, num=num, owner_id=owner_id, store_id=store_id)
+                # 将物品添加到数据库表Cargo
+                db.session.add(new_cargo)
+                db.session.commit()
 
-            # 将物品添加到数据库表Cargo
-            db.session.add(new_cargo)
-            db.session.commit()
+                # 回到index页面
+                return jsonify({'success': True})
 
-            # 回到index页面
-            return redirect(url_for('food'))
+                return redirect(url_for('food'))
+            except Exception as e:
+                return jsonify({'success': False, 'error': str(e)})
 
         return render_template('insert_food_cargo.html')
+
+
+
