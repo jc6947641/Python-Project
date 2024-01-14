@@ -9,8 +9,8 @@
   <ul>
             {% for user in user_list %}
                 <li>
-                    物品ID: {{ user.id }}  名称: {{ user.name }} 地址:{{ user.address }} 电话:{{user.tel}}
-                    <button type="button" onclick="location.href='{{ url_for('alter_user') }}'">物品入库</button>
+                    ID: {{ user.id }}  名称: {{ user.name }} 地址:{{ user.address }} 电话:{{user.tel}}
+                    <button type="button" onclick="location.href='{{ url_for('alter_user') }}'">修改个人信息</button>
                 </li>
             {% endfor %}
 

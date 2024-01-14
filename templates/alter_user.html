@@ -12,16 +12,16 @@
         <p style="color: red;">{{ error }}</p>
     {% endif %}
 
-    <form method="POST" action="{{ url_for('insert_book_cargo') }}">
+    <form method="POST" action="{{ url_for('alter_user') }}">
 
-        <label for="name">物品名:</label>
+        <label for="name">姓名:</label>
         <input type="text" name="name" required><br>
 
         <label for="address">地址:</label>
-        <input type="text" address="address" required><br>
+        <input type="text" name="address" required><br>
 
         <label for="tel">电话:</label>
-        <input type="text" tel="tel" required><br>
+        <input type="text" name="tel" required><br>
 
 
 
