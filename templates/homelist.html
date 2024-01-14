@@ -108,7 +108,19 @@
             <div class="nav-title">菜单导航</div>
 
             <div class="nav-content">
+
                 <a onclick="goBack()">首页</a>
+
+            <!--创建一个表单，提交到 search 函数处理-->
+                <form action="{{ url_for('search_food') }}" method="post">
+                    <!--创建一个输入框，name 属性为 keyword，placeholder 属性为提示文字-->
+                    <input type="text" name="keyword" placeholder="请输入关键词…">
+                    <!--创建一个提交按钮，value 属性为按钮文字-->
+                    <input type="submit" value="搜索">
+                </form>
+            </div>
+            <div class="nav-content">
+
                 <a href="{{ url_for('food') }}">食品</a>
                 <a href="{{ url_for('book') }}">书籍</a>
                 <a href="{{ url_for('sport') }}">运动器材</a>

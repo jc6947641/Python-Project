@@ -3,6 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>user</title>
+    <style>
+        /* 共享的样式类 */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .popup-content {
+            /* 样式内容可根据需要调整 */
+        }
+
+        .close-btn {
+            /* 样式内容可根据需要调整 */
+        }
+    </style>
 </head>
   <style>
 			button{
@@ -17,6 +40,7 @@
 
 	</style>
 <body>
+
 个人信息
   <ul>
             {% for user in user_list %}
@@ -26,10 +50,56 @@
                 </li>
             {% endfor %}
 
-        </ul>
+    <h1>个人信息</h1>
+    <ul>
+        {% for user in user_list %}
+            <li>
+                ID: {{ user.id }}  名称: {{ user.name }} 地址:{{ user.address }} 电话:{{user.tel}}
+                <button type="button" onclick="openUserPopup()">修改个人信息</button>
+            </li>
+        {% endfor %}
+    </ul>
 
 
+    <!-- 用户信息修改弹窗 -->
+    <div id="userPopup" class="popup">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closeUserPopup()">&times;</span>
+            <h2>修改个人信息</h2>
+            <label for="newName">姓名:</label>
+            <input type="text" id="newName" name="newName" required>
+            <label for="newAddress">地址:</label>
+            <input type="text" id="newAddress" name="newAddress" required>
+            <label for="newTel">电话:</label>
+            <input type="text" id="newTel" name="newTel" required>
+            <button type="button" onclick="submitUserForm()">提交</button>
+            <button type="button" onclick="closeUserPopup()">关闭</button>
+        </div>
+    </div>
 
+    <script>
+        // JavaScript function to open用户信息修改 popup
+        function openUserPopup() {
+            var userPopup = document.getElementById('userPopup');
+            userPopup.style.display = 'block';
+        }
 
+        // JavaScript function to close用户信息修改 popup
+        function closeUserPopup() {
+            var userPopup = document.getElementById('userPopup');
+            userPopup.style.display = 'none';
+        }
+
+        // JavaScript function to handle用户信息修改 form submission
+        function submitUserForm() {
+            var newName = document.getElementById('newName').value;
+            var newAddress = document.getElementById('newAddress').value;
+            var newTel = document.getElementById('newTel').value;
+
+            // 在这里添加提交用户信息的逻辑，例如使用AJAX发送请求
+
+            closeUserPopup();
+        }
+    </script>
 </body>
 </html>
