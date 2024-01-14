@@ -1,4 +1,4 @@
-from flask import render_template,jsonify,request,url_for,redirect,session
+from flask import render_template,jsonify,request,url_for,redirect,session,flash
 from models import User,db
 
 def go_user(app):
@@ -12,21 +12,29 @@ def go_user(app):
 
         return render_template('user.html', user_list=user_list)
 
-    @app.route('/insert_food_cargo', methods=['GET', 'POST'])
+    @app.route('/alter_user', methods=['GET', 'POST'])
     def alter_user():
         user_id = session.get('user_id')
         print(user_id)
         if request.method == 'POST':
             # Get data from the form
             name = request.form.get('name')
-            address = str(request.form.get('address'))  # Convert the input to an integer
-            tel = int(request.form.get('tel'))
+            address = request.form.get('address')
+            tel = request.form.get('tel')  # Keep as string to preserve leading zeros
 
+            # Retrieve and update user information
+            user = User.query.filter_by(id=user_id).first()
+            if user:
+                user.name = name
+                user.address = address
+                user.tel = tel
+                db.session.commit()
+                # Add a message about successful update
+                flash('User information updated successfully.')
+            else:
+                # Handle case where user is not found
+                flash('User not found.')
 
+            return redirect(url_for('homelist'))
 
-            # 将物品添加到数据库表Cargo
-            db.session.add(new_cargo)
-            db.session.commit()
-
-            # 回到index页面
-            return redirect(url_for('index'))
+        return render_template('alter_user.html')
