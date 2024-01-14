@@ -9,18 +9,8 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
-    <style>
-			button{
-				width: 100px;
-				height: 40px;
-				background: #FFFFFF;
-                border:#00000;
-				color: black;
-				font-size: 16px;
-			}
 
 
-	</style>
 
 </head>
 <body>
@@ -36,6 +26,10 @@
 
 
     <style>
+
+
+
+
         #popup {
             display: none;
             position: fixed;
@@ -43,8 +37,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
+            background: linear-gradient(to right, #c0c0c0, #a8a8a8);
+            border: none ;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
         }
@@ -55,8 +49,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
+            background: linear-gradient(to right, #c0c0c0, #a8a8a8);;
+            border: none ;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
         }
@@ -67,8 +61,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
+            background: linear-gradient(to right, #c0c0c0, #a8a8a8);;
+            border: none ;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
         }
@@ -79,11 +73,19 @@
             <li>
                 物品ID: {{ cargo.id }}  名称: {{ cargo.name }} 数量:{{ cargo.num }} 使用者ID:{{ cargo.owner_id}} 仓库:{{cargo.store_id}}
                 <button type="button" onclick="openPopup('Insert', {{ cargo.id }})">入库</button>
+
+
                  <button type="button" onclick="openPopup1('Delivery ', {{ cargo.id }})">出库</button>
+
+
                 <button type="button" class="delete-btn" data-cargo-id="{{ cargo.id }}">删除</button>
+
+
             </li>
         {% endfor %}
     </ul>
+
+
     <div id="popup">
         <h2>入库操作</h2>
         <!-- 添加文本输入框和提交按钮 -->
@@ -92,6 +94,8 @@
         <button type="button" onclick="submitForm()">提交</button>
         <button type="button" onclick="closePopup()">关闭</button>
     </div>
+
+
     <div id="popup1">
     <h2>出库操作</h2>
     <!-- 添加文本输入框和提交按钮 -->
@@ -99,18 +103,33 @@
     <input type="text" id="deliveryNum" name="deliveryNum">
     <button type="button" onclick="submitForm1()">提交</button>
     <button type="button" onclick="closePopup1()">关闭</button>
-</div>
-
-    <div id="popupInsert" style="display: {% if show_popup %}block{% else %}none{% endif %}">
-        <h2>新物品入库操作</h2>
-        <!-- 添加文本输入框和提交按钮 -->
-        <label for="newCargoName">物品名称:</label>
-        <input type="text" id="newCargoName" name="newCargoName" required>
-        <label for="newCargoNum">入库数量:</label>
-        <input type="text" id="newCargoNum" name="newCargoNum" required>
-        <button type="button" onclick="submitInsertForm()">提交</button>
-        <button type="button" onclick="closePopupInsert()">关闭</button>
     </div>
+
+<style>
+    /* 添加自定义样式 */
+    input[type="text"] {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        background-color:#F0FF0 ;
+    }
+
+
+
+
+</style>
+
+<div id="popupInsert" style="display: {% if show_popup %}block{% else %}none{% endif %}">
+    <h2>新物品入库操作</h2>
+    <!-- 添加文本输入框和提交按钮 -->
+    <label for="newCargoName">物品名称:</label>
+    <input type="text" id="newCargoName" name="newCargoName" required>
+    <label for="newCargoNum">入库数量:</label>
+    <input type="text" id="newCargoNum" name="newCargoNum" required>
+    <button type="button" onclick="submitInsertForm()">提交</button>
+    <button type="button" onclick="closePopupInsert()">关闭</button>
+</div>
 
 
     <script>
