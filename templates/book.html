@@ -158,7 +158,7 @@
         }
         var data = { cargoId: cargoId, cargoNum: cargoNum };
 
-        fetch('/insert_book', {
+        fetch('/insert_cargo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -222,7 +222,7 @@
 
         var data = { cargoId: cargoId, deliveryNum: deliveryNum };
 
-         fetch('/deliver_book', {
+         fetch('/deliver_cargo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

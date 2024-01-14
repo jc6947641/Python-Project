@@ -7,6 +7,7 @@ from cases.bookcase import go_bookcase
 from cases.sportcase import go_sportcase
 from cases.medicinecase import go_medicinecase
 from cases.user import go_user
+from cases.search_function import go_search_function
 import secrets
 
 
@@ -32,6 +33,7 @@ go_bookcase(app)  # 书籍仓库
 go_sportcase(app)  # 运动器材仓库
 go_medicinecase(app)
 go_user(app)
+go_search_function(app)
 
 
 if __name__ == '__main__':

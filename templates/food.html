@@ -77,7 +77,7 @@
     <ul>
         {% for cargo in cargo_list %}
             <li>
-                物品ID: {{ cargo.id }}  名称: {{ cargo.name }} 数量:{{ cargo.num }} 使用者ID:{{ cargo.owner_id}} 仓库:{{cargo.store_id}}
+                物品ID: {{ cargo.id }}  名称: {{ cargo.name }} 数量:{{ cargo.num }} 使用者ID:{{ cargo.owner_id}}
                 <button type="button" onclick="openPopup('Insert', {{ cargo.id }})">入库</button>
                  <button type="button" onclick="openPopup1('Delivery ', {{ cargo.id }})">出库</button>
                 <button type="button" class="delete-btn" data-cargo-id="{{ cargo.id }}">删除</button>
@@ -144,7 +144,7 @@
         }
             var data = { cargoId: cargoId, cargoNum: cargoNum };
 
-            fetch('/insert_food', {
+            fetch('/insert_cargo', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -241,7 +241,7 @@
 
         var data = { cargoId: cargoId, deliveryNum: deliveryNum };
 
-         fetch('/deliver_food', {
+         fetch('/deliver_cargo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -273,7 +273,7 @@
     }
 </script>
 
- <script>
+   <script>
         // JavaScript function to open 新物品入库 popup
         function openPopupInsert() {
             var popupInsert = document.getElementById('popupInsert');
@@ -310,7 +310,7 @@
                 body: JSON.stringify(data),
             })
             .then(response => response.json())
-            .then(data => {
+           .then(data => {
             console.log('Server response:', data);
             if (data.success) {
                 // 如果成功，使用 AJAX 请求获取新的右侧内容
@@ -329,10 +329,10 @@
         .catch(error => {
             console.error('Error during fetch operation:', error);
         });
+
             closePopupInsert();
         }
     </script>
-
 
 
 </body>
