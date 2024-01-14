@@ -25,7 +25,7 @@
 </head>
 <body>
     <h1>食品仓库</h1>
-     <button type="button" onclick="openPopupInsert()">新物品入库</button>
+     <button type="button"  onclick="openPopupInsert()">新物品入库</button>
     {% if flash_messages %}
         <div class="flash-messages">
             {% for message in flash_messages %}
@@ -181,13 +181,9 @@
         <ul class="custom-ul">
         {% for cargo in cargo_list %}
             <li>
-
-                物品ID: {{ cargo.id }}  名称: {{ cargo.name }} 数量:{{ cargo.num }} 使用者ID:{{ cargo.owner_id}}
-
                 <span class="key">物品ID:</span><span class="value">{{ cargo.id }}</span>
                 <span class="key">名称:</span><span class="value">{{ cargo.name }}</span>
                 <span class="key">数量:</span><span class="value">{{ cargo.num }}</span>
-                <span class="key">使用者ID:</span><span class="value">{{ cargo.owner_id }}</span>
                 <button type="button" onclick="openPopup('Insert', {{ cargo.id }})">入库</button>
                 <button type="button" onclick="openPopup1('Delivery ', {{ cargo.id }})">出库</button>
                 <button type="button" class="delete-btn" data-cargo-id="{{ cargo.id }}">删除</button>
