@@ -40,7 +40,7 @@ CREATE TABLE `cargo` (
 
 LOCK TABLES `cargo` WRITE;
 /*!40000 ALTER TABLE `cargo` DISABLE KEYS */;
-INSERT INTO `cargo` VALUES (1,'云南白药',10,2,'药品'),(2,'哑铃',20,1,'运动器材'),(3,'卫龙',10,1,'食品');
+INSERT INTO `cargo` VALUES (1,'云南白药',10,2,'药品'),(2,'哑铃',20,1,'运动器材'),(3,'卫龙',10,1,'食品'),(4,'汉堡',10,1,'食品'),(5,'汉堡',12,1,'书籍');
 /*!40000 ALTER TABLE `cargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +93,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'管理员','admin','123456',NULL,NULL),(2,'钱先生','test1','123456','南京市','222'),(7,'王采购','btest1','123456',NULL,'1333');
+INSERT INTO `user` VALUES (1,'张三','admin','123456','沈阳','111331'),(2,'李四','test1','123456','南京','2222'),(7,'赵六','btest1','123456','黑龙江','1333');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
