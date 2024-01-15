@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>user</title>
+    <title>用户信息</title>
     <style>
         /* 共享的样式类 */
         .popup {
@@ -12,10 +12,11 @@
             left: 50%;
             transform: translate(-50%, -50%);
             padding: 20px;
-            background-color: #fff;
+           background: linear-gradient(to right, #c0c0c0, #a8a8a8);
             border: 1px solid #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+             border-radius: 10px; /* 添加 border-radius 属性并设置值 */
         }
 
         .popup-content {
@@ -24,41 +25,73 @@
 
         .close-btn {
             /* 样式内容可根据需要调整 */
+            cursor: pointer;
+        }
+        h1, h2 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 20px;
+            font-size: 45px;
+            color: #555;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #333;
+            text-align: left; /* Align text to the left */
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            box-sizing: border-box;
+        }
+
+    </style>
+
+    <style>
+        button {
+            width: 100px;
+            height: 40px;
+            background: #FFFFFF;
+            border: 1px solid #000000;
+            color: black;
+            font-size: 16px;
         }
     </style>
 </head>
-  <style>
-			button{
-				width: 100px;
-				height: 40px;
-				background: #FFFFFF;
-                border:#00000;
-				color: black;
-				font-size: 16px;
-			}
-
-
-	</style>
 <body>
 
-
-
-    <h1>个人信息</h1>
+   <h1>个人信息</h1>
     <ul>
         {% for user in user_list %}
             <li>
-                ID: {{ user.id }}  名称: {{ user.name }} 地址:{{ user.address }} 电话:{{user.tel}}
-                <button type="button" onclick="openUserPopup()">修改信息</button>
+                <strong>ID:</strong> {{ user.id }}<br>
+                <strong>名称:</strong> {{ user.name }}<br>
+                <strong>地址:</strong> {{ user.address }}<br>
+                <strong>电话:</strong> {{ user.tel }}<br>
+                <button type="button" onclick="openUserPopup('{{ user.id }}')">修改信息</button>
             </li>
         {% endfor %}
     </ul>
 
-
-    <!-- 用户信息修改弹窗 -->
     <div id="userPopup" class="popup">
         <div class="popup-content">
             <span class="close-btn" onclick="closeUserPopup()">&times;</span>
             <h2>修改个人信息</h2>
+            <!-- 添加隐藏字段用于存储用户ID -->
+            <input type="hidden" id="newUserId" name="newUserId">
             <label for="newName">姓名:</label>
             <input type="text" id="newName" name="newName" required>
             <label for="newAddress">地址:</label>
@@ -72,9 +105,12 @@
 
     <script>
         // JavaScript function to open用户信息修改 popup
-        function openUserPopup() {
+        function openUserPopup(userId) {
             var userPopup = document.getElementById('userPopup');
             userPopup.style.display = 'block';
+
+            // 在弹窗中设置用户ID
+            document.getElementById('newUserId').value = userId;
         }
 
         // JavaScript function to close用户信息修改 popup
@@ -85,13 +121,38 @@
 
         // JavaScript function to handle用户信息修改 form submission
         function submitUserForm() {
+            var newUserId = document.getElementById('newUserId').value;
             var newName = document.getElementById('newName').value;
             var newAddress = document.getElementById('newAddress').value;
             var newTel = document.getElementById('newTel').value;
 
-            // 在这里添加提交用户信息的逻辑，例如使用AJAX发送请求
+            // 使用AJAX发送用户信息到后端
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/alter_user', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // 处理响应，例如显示成功消息
+                    console.log('Success:', xhr.responseText);
+                    closeUserPopup();
+                    // 获取右侧用户信息的内容
+                    $.ajax({
+                        url: '/user',
+                        type: 'GET',
+                        success: function (newContent) {
+                            // 更新右侧内容
+                            $(".content-right").html(newContent);
+                        }
+                    });
+                }
+            };
 
-            closeUserPopup();
+            var formData = 'newUserId=' + encodeURIComponent(newUserId) +
+                            '&newName=' + encodeURIComponent(newName) +
+                            '&newAddress=' + encodeURIComponent(newAddress) +
+                            '&newTel=' + encodeURIComponent(newTel);
+
+            xhr.send(formData);
         }
     </script>
 </body>

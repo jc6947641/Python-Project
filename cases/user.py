@@ -12,29 +12,25 @@ def go_user(app):
 
         return render_template('user.html', user_list=user_list)
 
-    @app.route('/alter_user', methods=['GET', 'POST'])
+    @app.route('/alter_user', methods=['POST'])
     def alter_user():
         user_id = session.get('user_id')
-        print(user_id)
-        if request.method == 'POST':
-            # Get data from the form
-            name = request.form.get('name')
-            address = request.form.get('address')
-            tel = request.form.get('tel')  # Keep as string to preserve leading zeros
 
-            # Retrieve and update user information
-            user = User.query.filter_by(id=user_id).first()
-            if user:
-                user.name = name
-                user.address = address
-                user.tel = tel
-                db.session.commit()
-                # Add a message about successful update
-                flash('User information updated successfully.')
-            else:
-                # Handle case where user is not found
-                flash('User not found.')
+        # 获取POST请求中的用户信息
+        new_user_id = request.form.get('newUserId')
+        new_name = request.form.get('newName')
+        new_address = request.form.get('newAddress')
+        new_tel = request.form.get('newTel')
 
-            return redirect(url_for('homelist'))
+        # 根据用户ID更新用户信息
+        user = User.query.filter_by(id=new_user_id).first()
+        if user:
+            user.name = new_name
+            user.address = new_address
+            user.tel = new_tel
+            db.session.commit()
+            flash('用户信息更新成功。')
+        else:
+            flash('未找到用户。')
 
-        return render_template('alter_user.html')
+        return redirect(url_for('homelist'))
