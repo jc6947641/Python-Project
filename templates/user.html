@@ -82,9 +82,12 @@
                 <strong>地址:</strong> {{ user.address }}<br>
                 <strong>电话:</strong> {{ user.tel }}<br>
                 <button type="button" onclick="openUserPopup('{{ user.id }}')">修改信息</button>
+
             </li>
         {% endfor %}
     </ul>
+
+     <button type="button" onclick="logout()">退出登录</button>
 
     <div id="userPopup" class="popup">
         <div class="popup-content">
@@ -155,5 +158,20 @@
             xhr.send(formData);
         }
     </script>
+
+<script>
+    // ... your existing JavaScript code ...
+
+    // JavaScript function to handle logout
+    function logout() {
+        // Perform any logout actions if needed
+
+        // Redirect to the login page
+        window.location.href = '/'; // Change '/login' to the actual login page URL
+    }
+
+    // ... your existing JavaScript code ...
+</script>
+
 </body>
 </html>
